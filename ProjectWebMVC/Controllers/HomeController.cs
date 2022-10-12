@@ -18,7 +18,33 @@ namespace ProjectWebMVC.Controllers
             return View();
         }
 
+        public IActionResult Filters()
+        {
+            return View();
+        }
+
+        public IActionResult AboutUs()
+        {
+            return View();
+        }
+
+        public IActionResult HowToUse()
+        {
+            IEnumerable<Program> model = new List<Program>();
+            return View(model);
+        }
+
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public IActionResult Delete()
+        {
+            return View();
+        }
+
+        public IActionResult Edit()
         {
             return View();
         }
