@@ -1,20 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\olive\\OneDrive\\Área de Trabalho\\Home\\Git Repository\\APS-6-Semestre\\ProjectWebMVC\\ProjectWebMVC.csproj": {}
+    "C:\\Users\\Vitor\\Desktop\\APS\\ProjectWebMVC\\ProjectWebMVC.csproj": {}
   },
   "projects": {
-    "C:\\Users\\olive\\OneDrive\\Área de Trabalho\\Home\\Git Repository\\APS-6-Semestre\\ProjectWebMVC\\ProjectWebMVC.csproj": {
+    "C:\\Users\\Vitor\\Desktop\\APS\\ProjectWebMVC\\ProjectWebMVC.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\olive\\OneDrive\\Área de Trabalho\\Home\\Git Repository\\APS-6-Semestre\\ProjectWebMVC\\ProjectWebMVC.csproj",
+        "projectUniqueName": "C:\\Users\\Vitor\\Desktop\\APS\\ProjectWebMVC\\ProjectWebMVC.csproj",
         "projectName": "ProjectWebMVC",
-        "projectPath": "C:\\Users\\olive\\OneDrive\\Área de Trabalho\\Home\\Git Repository\\APS-6-Semestre\\ProjectWebMVC\\ProjectWebMVC.csproj",
-        "packagesPath": "C:\\Users\\olive\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\olive\\OneDrive\\Área de Trabalho\\Home\\Git Repository\\APS-6-Semestre\\ProjectWebMVC\\obj\\",
+        "projectPath": "C:\\Users\\Vitor\\Desktop\\APS\\ProjectWebMVC\\ProjectWebMVC.csproj",
+        "packagesPath": "C:\\Users\\Vitor\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Vitor\\Desktop\\APS\\ProjectWebMVC\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\olive\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Vitor\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
