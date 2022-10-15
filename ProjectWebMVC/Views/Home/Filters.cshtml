@@ -1,28 +1,51 @@
-﻿@model Program
+﻿@model FiltersViewModel
 
-@{
-    ViewData["Title"] = "Filters";
-}
-
-<h1>Filters</h1>
+<h1>@ViewData["Title"]</h1>
 
 <h4>Program</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Filters">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+	<div class="col-md-4">
+		<form asp-action="Filters">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="form-group">
+				<input type="submit" value="Create" class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+	<a asp-action="Index">Back to List</a>
+</div>
+<form method="post">
+	<div class="row">
+		<div class="col-md-4 col-lg-4">
+			@*<button class="btn btn-default" type="button" value="Selecione a Imagem" onclick="@Url.Action("GetImage", "Home")"></button>*@
+			@Html.TextBox("textBoxImage", Model.FileName, new { @class = "form-control", type = "file", accept = "Image/jpg,Imagejpeg"})
+		</div>
+		<div class="col-md-4 col-lg-4">
+			<button class="btn btn-default" type="submit" value="Aplicar"></button>
+			<input class="btn btn-primary" type="submit" value="Aplicar" />
+		</div>
+		<div class="col-md-4 col-lg-4">
+			<button class="btn btn-default" type="button" value="Baixar" onclick="@Url.Action("SaveImage", "Home")"></button>
+		</div>
+	</div>
+</form>
+
+<div>
+	@Model.OriginImage
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+
+	<script>
+		$(document).on('change', '#textBoxImage', function () {
+			console.log("entrei no change");
+		})
+	</script>
 }
