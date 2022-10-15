@@ -1,6 +1,7 @@
 {
   "format": 1,
   "restore": {
+<<<<<<< HEAD
     "C:\\Users\\Isnaider\\Music\\Git Repository\\APS-6-Semestre\\ProjectWebMVC\\ProjectWebMVC.csproj": {}
   },
   "projects": {
@@ -12,9 +13,29 @@
         "projectPath": "C:\\Users\\Isnaider\\Music\\Git Repository\\APS-6-Semestre\\ProjectWebMVC\\ProjectWebMVC.csproj",
         "packagesPath": "C:\\Users\\Isnaider\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\Isnaider\\Music\\Git Repository\\APS-6-Semestre\\ProjectWebMVC\\obj\\",
+=======
+    "C:\\Users\\Vitor\\Desktop\\APS\\ProjectWebMVC\\ProjectWebMVC.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\Vitor\\Desktop\\APS\\ProjectWebMVC\\ProjectWebMVC.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Vitor\\Desktop\\APS\\ProjectWebMVC\\ProjectWebMVC.csproj",
+        "projectName": "ProjectWebMVC",
+        "projectPath": "C:\\Users\\Vitor\\Desktop\\APS\\ProjectWebMVC\\ProjectWebMVC.csproj",
+        "packagesPath": "C:\\Users\\Vitor\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Vitor\\Desktop\\APS\\ProjectWebMVC\\obj\\",
+>>>>>>> 1e7ceaa6aeb2ce6bd3b8be1639f78ad8fa4031bf
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
+<<<<<<< HEAD
           "C:\\Users\\Isnaider\\AppData\\Roaming\\NuGet\\NuGet.Config",
+=======
+          "C:\\Users\\Vitor\\AppData\\Roaming\\NuGet\\NuGet.Config",
+>>>>>>> 1e7ceaa6aeb2ce6bd3b8be1639f78ad8fa4031bf
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
