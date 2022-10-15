@@ -1,21 +1,25 @@
 ﻿using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Security.Permissions;
 using Microsoft.AspNetCore.Mvc;
 using ProjectWebMVC.Models;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ProjectWebMVC.Controllers
 {
     public class HomeController : Controller
     {
+        private string serverPath;
         private readonly ILogger<HomeController> _logger;
         public Bitmap imagem;
         public int[] Vcin = new int[256];
         public int[] Vcin2 = new int[256];
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment system)
         {
             _logger = logger;
+            serverPath = system.WebRootPath;
         }
 
         public IActionResult Index()
@@ -34,7 +38,18 @@ namespace ProjectWebMVC.Controllers
         [HttpPost]
         public IActionResult Filters(FiltersViewModel model)
         {
-            if(model.OriginImage == null)
+            string savePath = serverPath + "\\images\\";
+
+            if (!Directory.Exists(savePath))
+                Directory.CreateDirectory(savePath);
+
+            using (var stream = System.IO.File.Create(savePath + model.Image.FileName))
+            {
+                model.Image.CopyToAsync(stream);
+                model.OriginImage = new Bitmap(stream);
+            }
+
+            if (model.OriginImage == null)
                 return View(model);
 
             switch (model.Type)
