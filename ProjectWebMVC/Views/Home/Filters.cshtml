@@ -1,14 +1,13 @@
-﻿@model Program
+﻿
+@model Program
 
 @{
-    ViewData["Title"] = "Filters";
+    ViewData["Title"] = "Filtragem";
 }
 
-<h1>Filters</h1>
-
-<h4>Program</h4>
+<h1>@ViewData["Title"]</h1>
 <hr />
-<div class="row">
+@*<div class="row">
     <div class="col-md-4">
         <form asp-action="Filters">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -17,11 +16,58 @@
             </div>
         </form>
     </div>
-</div>
+</div>*@
+<div class="row">
+    <div class="col-md-12">
+        <div class="ibox">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="image-container">
+                        <img src="/Img/no-image.jpg" id="image" />
+                    </div>
+                    <div>
+                         <button class="clean" style="">Selecione uma imagem
+                            <input type="file" name="arquivos" alt="Selecione uma imagem"  class="btn btn-success" multiple/>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row" style="margin-top: 25%;">
+                        <div>
+                            <button class="btn-apli-filter"><span>Aplicar</span></button>
+                        </div>
+                    </div>                  
+                </div>
+                <div class="col-md-4">
+                    <div class="image-container">
+                        <img src="/Img/no-image.jpg" id="image" />
+                    </div>
+                    <div>
+                         <button class="clean" style="">Selecione uma imagem
+                            <input type="file" name="arquivos" alt="Selecione uma imagem"  class="btn btn-success" multiple/>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
 
-<div>
-    <a asp-action="Index">Back to List</a>
+    <div class="col-md-12">
+        <div class="ibox">
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+        </div>
+    </div>
+     @*<div class="col-md-6">
+        <div class="ibox">
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+        </div>
+    </div>*@
+
 </div>
+@*<div>
+    <a asp-action="Index">Back to List</a>
+</div>*@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

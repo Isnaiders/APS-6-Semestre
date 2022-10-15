@@ -10,4 +10,9 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.10" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\Img\Coca-Cola-Logo-1987.jpg" />
+    <None Include="wwwroot\Img\no-image.jpg" />
+  </ItemGroup>
+
 </Project>
