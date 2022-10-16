@@ -1,7 +1,7 @@
 ﻿@using ProjectWebMVC.Models.Enum
 @model FiltersViewModel
 @{
-	string originImageName = Model.OriginImage?.FileName;
+    string originImageName = Model.OriginImage?.FileName;
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -11,64 +11,65 @@
 @*@Html.ValidationSummary(false, "", new { @class = "text-danger" })*@
 
 <form method="post" enctype="multipart/form-data">
-	@Html.Hidden("Image", Model.OriginImage)
-	<div class="row">
-		<div class="col-md-12">
-			<div class="ibox">
-				<div class="row">
-					<div class="col-md-4">
-						<div class="image-container">
-							@if (originImageName == null)
-							{
-								<img src="/img/no-image.jpg" id="image" />
-							}
-							else
-							{
-								<img src="/images/@originImageName" id="image" />
-							}
-						</div>
-						<div>
-								<input style="width: 100%; box-shadow: rgb(0 0 0 / 50%) 0px 2px 1px !important; margin-bottom: 10px;" type="file" name="OriginImage" accept="image/jpg, image/jpeg, image/png" />
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group">
-							<label class="control-label"> Selecione o Filtro:</label>
-							<select asp-for="Type"  class="drop-select" asp-items="Html.GetEnumSelectList<FilterType>()"></select>
-						</div>
-						<div class="col-md-12">
-							<div class="wrapper">
-								<button type="submit" class="btn-slide"><span>Aplicar</span></button>
-								@*<input type="submit" name="filtrar" alt="Aplicar filtro" class="btn-slide" value="Aplicar" multiple />*@
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="image-container">
-							@if (@Model.FilteredImageName == null)
-							{
-								<img src="/img/no-image.jpg" id="image" />
-							}
-							else
-							{
-								<img src="/images/@Model.FilteredImageName" id="image" />
-							}
-						</div>
-						<div>
-							<button class="clean" style="">
-								<i class="fa fa-download"></i> Download
-								@*<input type="file" name="arquivos" alt="Selecione uma imagem" class="btn btn-success" multiple />*@
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+    @Html.Hidden("Image", Model.OriginImage)
+    <div class="row">
+        <div class="col-md-12">
+            <div class="ibox">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="image-container">
+                            @if (originImageName == null)
+                            {
+                                <img src="/img/no-image.jpg" id="image" />
+                            }
+                            else
+                            {
+                                <img src="/images/@originImageName" id="image" />
+                            }
+                        </div>
+                        <div>
+                            <input style="width: 100%; box-shadow: rgb(0 0 0 / 50%) 0px 2px 1px !important; margin-bottom: 10px;" type="file" name="OriginImage" accept="image/jpg, image/jpeg, image/png" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label"> Selecione o Filtro:</label>
+                            <select asp-for="Type" class="drop-select" asp-items="Html.GetEnumSelectList<FilterType>()"></select>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="wrapper">
+                                <button type="submit" class="btn-slide"><span>Aplicar</span></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="image-container">
+                            @if (@Model.FilteredImageName == null)
+                            {
+                                <img src="/img/no-image.jpg" id="image" />
+                            }
+                            else
+                            {
+                                <img src="/images/@Model.FilteredImageName" id="image" />
+                            }
+                        </div>
+                        <div>
+                            @if (Model.FilteredImageName != null)
+                            {
+                                <button class="clean">
+                                    <a href="/images/@Model.FilteredImageName" download><i class="fa fa-download"></i> Download</a>
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </form>
 
 @section Scripts {
-	@{
-		await Html.RenderPartialAsync("_ValidationScriptsPartial");
-	}
-}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
