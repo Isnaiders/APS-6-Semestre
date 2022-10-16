@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Reflection;
 using System.Security.Permissions;
@@ -35,7 +37,7 @@ namespace ProjectWebMVC.Controllers
         public IActionResult Filters()
         {
             var model = new FiltersViewModel();
-            ViewData["Title"] = "Filters";
+            ViewData["Title"] = "Filtragem";
 
             return View(model);
         }
@@ -43,7 +45,7 @@ namespace ProjectWebMVC.Controllers
         [HttpPost]
         public IActionResult Filters(FiltersViewModel model)
         {
-            if (model.Image == null)
+            if (model.OriginImage == null)
             {
                 ModelState.AddModelError("File", "Nenhuma imagem foi selecionada");
                 return View(model);
@@ -54,10 +56,17 @@ namespace ProjectWebMVC.Controllers
             if (!Directory.Exists(savePath))
                 Directory.CreateDirectory(savePath);
 
-            using (var stream = System.IO.File.Create(savePath + model.Image.FileName))
+            using (var stream = System.IO.File.Create(savePath + model.OriginImage.FileName))
             {
-                model.Image.CopyToAsync(stream);
-                model.OriginImage = new Bitmap(stream);
+                try
+                {
+                    model.OriginImage.CopyToAsync(stream);
+                    model.OriginImageBit = new Bitmap(stream);
+                }
+                catch (Exception)
+                {
+                    return View(model);
+                }
             }
 
             switch (model.Type)
@@ -65,7 +74,7 @@ namespace ProjectWebMVC.Controllers
                 case Models.Enum.FilterType.Unknown:
                     break;
                 case Models.Enum.FilterType.ConversãoCinza:
-                    model.FilteredImage = GrayConvertion(model.OriginImage);
+                    model.FilteredImageBit = GrayConvertion(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.PassaBaixa:
                     break;
@@ -105,25 +114,56 @@ namespace ProjectWebMVC.Controllers
                     break;
             }
 
+            //--< Output as .Jpg >--
+            var filteredImageName = "Filtered_" + model.OriginImage.FileName;
+            var outputPath = savePath + filteredImageName;
+            using (var output = System.IO.File.Open(outputPath, FileMode.Create))
+            {
+                const long quality = 50L;
+                //< setup jpg >
+                var qualityParamId = Encoder.Quality;
+
+                var encoderParameters = new EncoderParameters(1);
+
+                encoderParameters.Param[0] = new EncoderParameter(qualityParamId, quality);
+                //</ setup jpg >
+
+                //< save Bitmap as Jpg >
+                var codec = ImageCodecInfo.GetImageDecoders().FirstOrDefault(c => c.FormatID == ImageFormat.Jpeg.Guid);
+
+                model.FilteredImageBit.Save(output, codec, encoderParameters);
+                //</ save Bitmap as Jpg >
+            }
+            //--< Output as .Jpg >--
+
+            model.FilteredImageName = filteredImageName;
+
             return View(model);
         }
 
-        [HttpPost]
-        public IActionResult GetImage(FiltersViewModel model)
-        {
-            string savePath = serverPath + "\\images\\";
+        //[HttpPost]
+        //public IActionResult GetImage(FiltersViewModel model)
+        //{
+        //    string savePath = serverPath + "\\images\\";
 
-            if (!Directory.Exists(savePath))
-                Directory.CreateDirectory(savePath);
+        //    if (!Directory.Exists(savePath))
+        //        Directory.CreateDirectory(savePath);
 
-            using (var stream = System.IO.File.Create(savePath + model.Image.FileName))
-            {
-                model.Image.CopyToAsync(stream);
-                model.OriginImage = new Bitmap(stream);
-            }
+        //    using (var stream = System.IO.File.Create(savePath + model.OriginImage.FileName))
+        //    {
+        //        model.OriginImage.CopyToAsync(stream);
+        //        model.OriginImage.CopyToAsync(stream);
+        //    }
 
-            return RedirectToAction("Filters", model);
-        }
+        //    //--< Upload Form >--
+        //    string srcImage_Path = "wwwroot/images/me.jpg";
+        //    string resizeImage_Path = "wwwroot/images/mizinho.jpg";
+        //    int new_Size = 500;
+        //    Image_resize(srcImage_Path, resizeImage_Path, new_Size);
+        //    //--</ Upload Form >--
+
+        //    return RedirectToAction("Filters", model);
+        //}
 
         private Bitmap GrayConvertion(Bitmap image)
         {

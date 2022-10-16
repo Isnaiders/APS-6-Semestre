@@ -1,7 +1,7 @@
 ﻿@using ProjectWebMVC.Models.Enum
 @model FiltersViewModel
 @{
-	string imageName = Model.Image?.FileName;
+	string originImageName = Model.OriginImage?.FileName;
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -11,24 +11,24 @@
 @*@Html.ValidationSummary(false, "", new { @class = "text-danger" })*@
 
 <form method="post" enctype="multipart/form-data">
-	@Html.Hidden("Image", Model.Image)
+	@Html.Hidden("Image", Model.OriginImage)
 	<div class="row">
 		<div class="col-md-12">
 			<div class="ibox">
 				<div class="row">
 					<div class="col-md-4">
 						<div class="image-container">
-							@if (imageName == null)
+							@if (originImageName == null)
 							{
 								<img src="/img/no-image.jpg" id="image" />
 							}
 							else
 							{
-								<img src="/images/@imageName" id="image" />
+								<img src="/images/@originImageName" id="image" />
 							}
 						</div>
 						<div>
-								<input style="width: 100%; box-shadow: rgb(0 0 0 / 50%) 0px 2px 1px !important; margin-bottom: 10px;" type="file" name="Image" accept="image/*" />
+								<input style="width: 100%; box-shadow: rgb(0 0 0 / 50%) 0px 2px 1px !important; margin-bottom: 10px;" type="file" name="OriginImage" accept="image/*" />
 						</div>
 					</div>
 					<div class="col-md-4">
@@ -44,7 +44,14 @@
 					</div>
 					<div class="col-md-4">
 						<div class="image-container">
-							<img src="/Img/no-image.jpg" id="image" />
+							@if (@Model.FilteredImageName == null)
+							{
+								<img src="/img/no-image.jpg" id="image" />
+							}
+							else
+							{
+								<img src="/images/@Model.FilteredImageName" id="image" />
+							}
 						</div>
 						<div>
 							<button class="clean" style="">
@@ -58,6 +65,7 @@
 		</div>
 	</div>
 </form>
+
 @section Scripts {
 	@{
 		await Html.RenderPartialAsync("_ValidationScriptsPartial");
