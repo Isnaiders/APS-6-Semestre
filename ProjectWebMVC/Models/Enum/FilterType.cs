@@ -16,10 +16,14 @@ namespace ProjectWebMVC.Models.Enum
         Gaussiano,
         [Display(Name = "Laplaciano")]
         Laplaciano,
-        [Display(Name = "Prewitt")]
-        Prewitt,
-        [Display(Name = "Sobel")]
-        Sobel,
+        [Display(Name = "Prewitt Hx")]
+        PrewittHx,
+        [Display(Name = "Prewitt Hy Hx")]
+        PrewittHyHx,
+        [Display(Name = "Sobel Hx")]
+        SobelHx,
+        [Display(Name = "Sobel Hy")]
+        SobelHy,
         [Display(Name = "Histograma")]
         Histograma,
         [Display(Name = "Equalização")]
