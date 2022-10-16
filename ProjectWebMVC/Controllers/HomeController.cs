@@ -82,7 +82,7 @@ namespace ProjectWebMVC.Controllers
                     //model.FilteredImageBit = Laplaciano(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.Prewitt:
-                    //model.FilteredImageBit = Prewitt(model.OriginImageBit);
+                    model.FilteredImageBit = Prewitt(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.Sobel:
                     //model.FilteredImageBit = Sobel(model.OriginImageBit);
@@ -176,6 +176,115 @@ namespace ProjectWebMVC.Controllers
         //}
 
 
+
+
+
+        private Bitmap GrayConvertion(Bitmap image)
+        {
+            Bitmap grayScale = new Bitmap(image.Width, image.Height);
+
+            for (Int32 y = 0; y < grayScale.Height; y++)
+            {
+                for (Int32 x = 0; x < grayScale.Width; x++)
+                {
+                    Color c = image.GetPixel(x, y);
+
+                    Int32 gs = (Int32)(c.R * 0.3 + c.G * 0.59 + c.B * 0.11);
+                    Vcin2[gs]++;
+                    int trasn = image.GetPixel(x, y).A;
+                    grayScale.SetPixel(x, y, Color.FromArgb(trasn, gs, gs, gs));
+                }
+            }
+
+            return grayScale;
+        }
+
+
+        private Bitmap PassaAlta(Bitmap image)
+        {
+            try
+            {
+                int i = 0;
+                int u = 0;
+                double colorR = 0;
+                double colorG = 0;
+                double colorB = 0;
+                int h = image.Width;
+                int v = image.Height;
+                nova_imagem = new Bitmap(h, v);
+
+
+                while (i < v)
+                {
+                    while (u < h)
+                    {
+                        if (u == 0 || i == 0 || u == h - 1 || i == v - 1)
+                        {
+                            nova_imagem.SetPixel(u, i, image.GetPixel(u, i));
+                        }
+                        else
+                        {
+                            colorR = image.GetPixel(u - 1, i - 1).R * -1 +
+                                     image.GetPixel(u, i - 1).R * -1 +
+                                     image.GetPixel(u + 1, i - 1).R * -1 +
+                                     image.GetPixel(u - 1, i).R * -1 +
+                                     image.GetPixel(u, i).R * 8 +
+                                     image.GetPixel(u + 1, i).R * -1 +
+                                     image.GetPixel(u - 1, i + 1).R * -1 +
+                                     image.GetPixel(u, i + 1).R * -1 +
+                                     image.GetPixel(u + 1, i + 1).R * -1;
+
+                            colorG = image.GetPixel(u - 1, i - 1).G * -1 +
+                                    image.GetPixel(u, i - 1).G * -1 +
+                                    image.GetPixel(u + 1, i - 1).G * -1 +
+                                    image.GetPixel(u - 1, i).G * -1 +
+                                    image.GetPixel(u, i).G * 8 +
+                                    image.GetPixel(u + 1, i).G * -1 +
+                                    image.GetPixel(u - 1, i + 1).G * -1 +
+                                    image.GetPixel(u, i + 1).G * -1 +
+                                    image.GetPixel(u + 1, i + 1).G * -1;
+
+                            colorB = image.GetPixel(u - 1, i - 1).B * -1 +
+                                   image.GetPixel(u, i - 1).B * -1 +
+                                   image.GetPixel(u + 1, i - 1).B * -1 +
+                                   image.GetPixel(u - 1, i).B * -1 +
+                                   image.GetPixel(u, i).B * 8 +
+                                   image.GetPixel(u + 1, i).B * -1 +
+                                   image.GetPixel(u - 1, i + 1).B * -1 +
+                                   image.GetPixel(u, i + 1).B * -1 +
+                                   image.GetPixel(u + 1, i + 1).B * -1;
+
+                            if (colorB > 255)
+                                colorB = 255;
+                            else if (colorB < 0)
+                                colorB = 0;
+
+
+                            if (colorR > 255)
+                                colorR = 255;
+                            else if (colorR < 0)
+                                colorR = 0;
+
+                            if (colorG > 255)
+                                colorG = 255;
+                            else if (colorG < 0)
+                                colorG = 0;
+
+
+                            nova_imagem.SetPixel(u, i, Color.FromArgb(image.GetPixel(u, i).A, Convert.ToInt32(colorR), Convert.ToInt32(colorG), Convert.ToInt32(colorB)));
+                        }
+
+                        u = u + 1;
+
+                    }
+                    u = 0;
+                    i = i + 1;
+                }
+            }
+            catch { }
+            return nova_imagem;
+        }
+
         private Bitmap Gaussiano(Bitmap image)
         {
             try
@@ -262,109 +371,91 @@ namespace ProjectWebMVC.Controllers
             return nova_imagem;
         }
 
-        private Bitmap GrayConvertion(Bitmap image)
-        {
-            Bitmap grayScale = new Bitmap(image.Width, image.Height);
-
-            for (Int32 y = 0; y < grayScale.Height; y++)
-            {
-                for (Int32 x = 0; x < grayScale.Width; x++)
-                {
-                    Color c = image.GetPixel(x, y);
-
-                    Int32 gs = (Int32)(c.R * 0.3 + c.G * 0.59 + c.B * 0.11);
-                    Vcin2[gs]++;
-                    int trasn = image.GetPixel(x, y).A;
-                    grayScale.SetPixel(x, y, Color.FromArgb(trasn, gs, gs, gs));
-                }
-            }
-
-            return grayScale;
-        }
-
-
-        private Bitmap PassaAlta(Bitmap image)
+        private Bitmap Prewitt(Bitmap image)
         {
             try
             {
-                    int i = 0;
-                    int u = 0;
-                    double colorR = 0;
-                    double colorG = 0;
-                    double colorB = 0;
-                    int h = image.Width;
-                    int v = image.Height;
-                    nova_imagem = new Bitmap(h, v);
+                int i = 0;
+                int u = 0;
+                double colorR = 0;
+                double colorG = 0;
+                double colorB = 0;
+                int h = image.Width;
+                int v = image.Height;
+                nova_imagem = new Bitmap(h, v);
 
-
-                    while (i < v)
+                while (i < v)
+                {
+                    while (u < h)
                     {
-                        while (u < h)
+                        if (u == 0 || i == 0 || u == h - 1 || i == v - 1)
                         {
-                            if (u == 0 || i == 0 || u == h - 1 || i == v - 1)
-                            {
-                                nova_imagem.SetPixel(u, i, image.GetPixel(u, i));
-                            }
-                            else
-                            {
-                                colorR = image.GetPixel(u - 1, i - 1).R * -1 +
-                                         image.GetPixel(u, i - 1).R * -1 +
-                                         image.GetPixel(u + 1, i - 1).R * -1 +
-                                         image.GetPixel(u - 1, i).R * -1 +
-                                         image.GetPixel(u, i).R * 8 +
-                                         image.GetPixel(u + 1, i).R * -1 +
-                                         image.GetPixel(u - 1, i + 1).R * -1 +
-                                         image.GetPixel(u, i + 1).R * -1 +
-                                         image.GetPixel(u + 1, i + 1).R * -1;
-
-                                colorG = image.GetPixel(u - 1, i - 1).G * -1 +
-                                        image.GetPixel(u, i - 1).G * -1 +
-                                        image.GetPixel(u + 1, i - 1).G * -1 +
-                                        image.GetPixel(u - 1, i).G * -1 +
-                                        image.GetPixel(u, i).G * 8 +
-                                        image.GetPixel(u + 1, i).G * -1 +
-                                        image.GetPixel(u - 1, i + 1).G * -1 +
-                                        image.GetPixel(u, i + 1).G * -1 +
-                                        image.GetPixel(u + 1, i + 1).G * -1;
-
-                                colorB = image.GetPixel(u - 1, i - 1).B * -1 +
-                                       image.GetPixel(u, i - 1).B * -1 +
-                                       image.GetPixel(u + 1, i - 1).B * -1 +
-                                       image.GetPixel(u - 1, i).B * -1 +
-                                       image.GetPixel(u, i).B * 8 +
-                                       image.GetPixel(u + 1, i).B * -1 +
-                                       image.GetPixel(u - 1, i + 1).B * -1 +
-                                       image.GetPixel(u, i + 1).B * -1 +
-                                       image.GetPixel(u + 1, i + 1).B * -1;
-
-                                if (colorB > 255)
-                                    colorB = 255;
-                                else if (colorB < 0)
-                                    colorB = 0;
-
-
-                                if (colorR > 255)
-                                    colorR = 255;
-                                else if (colorR < 0)
-                                    colorR = 0;
-
-                                if (colorG > 255)
-                                    colorG = 255;
-                                else if (colorG < 0)
-                                    colorG = 0;
-
-
-                                nova_imagem.SetPixel(u, i, Color.FromArgb(image.GetPixel(u, i).A, Convert.ToInt32(colorR), Convert.ToInt32(colorG), Convert.ToInt32(colorB)));
-                            }
-
-                            u = u + 1;
-
+                            nova_imagem.SetPixel(u, i, image.GetPixel(u, i));
                         }
-                        u = 0;
-                        i = i + 1;
+                        else
+                        {
+                            colorR = image.GetPixel(u - 1, i - 1).R * 1 +
+                                     image.GetPixel(u, i - 1).R * 0 +
+                                     image.GetPixel(u + 1, i - 1).R * -1 +
+                                     image.GetPixel(u - 1, i).R * 1 +
+                                     image.GetPixel(u, i).R * 0 +
+                                     image.GetPixel(u + 1, i).R * -1 +
+                                     image.GetPixel(u - 1, i + 1).R * 1 +
+                                     image.GetPixel(u, i + 1).R * 0 +
+                                     image.GetPixel(u + 1, i + 1).R * -1;
+
+                            colorG = image.GetPixel(u - 1, i - 1).G * 1 +
+                                    image.GetPixel(u, i - 1).G * 0 +
+                                    image.GetPixel(u + 1, i - 1).G * -1 +
+                                    image.GetPixel(u - 1, i).G * 1 +
+                                    image.GetPixel(u, i).G * 0 +
+                                    image.GetPixel(u + 1, i).G * -1 +
+                                    image.GetPixel(u - 1, i + 1).G * 1 +
+                                    image.GetPixel(u, i + 1).G * 0 +
+                                    image.GetPixel(u + 1, i + 1).G * -1;
+
+                            colorB = image.GetPixel(u - 1, i - 1).B * 1 +
+                                   image.GetPixel(u, i - 1).B * 0 +
+                                   image.GetPixel(u + 1, i - 1).B * -1 +
+                                   image.GetPixel(u - 1, i).B * 1 +
+                                   image.GetPixel(u, i).B * 0 +
+                                   image.GetPixel(u + 1, i).B * -1 +
+                                   image.GetPixel(u - 1, i + 1).B * 1 +
+                                   image.GetPixel(u, i + 1).B * 0 +
+                                   image.GetPixel(u + 1, i + 1).B * -1;
+
+                            colorB = colorB + 127;
+                            colorR = colorR + 127;
+                            colorG = colorG + 127;
+
+                            if (colorB > 255)
+                            {
+                                colorB = 255;
+                            }
+                            else if (colorB < 0)
+                                colorB = 0;
+
+
+                            if (colorR > 255)
+                                colorR = 255;
+                            else if (colorR < 0)
+                                colorR = 0;
+
+                            if (colorG > 255)
+                                colorG = 255;
+                            else if (colorG < 0)
+                                colorG = 0;
+
+                            nova_imagem.SetPixel(u, i, Color.FromArgb(image.GetPixel(u, i).A, Convert.ToInt32(colorR), Convert.ToInt32(colorG), Convert.ToInt32(colorB)));
+                        }
+                        u = u + 1;
                     }
+                    u = 0;
+                    i = i + 1;
+                }
             }
             catch { }
+
             return nova_imagem;
         }
 
