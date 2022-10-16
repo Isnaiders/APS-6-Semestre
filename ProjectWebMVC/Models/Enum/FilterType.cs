@@ -28,16 +28,20 @@ namespace ProjectWebMVC.Models.Enum
         PassaAlta,
         [Display(Name = "Passa Baixa")]
         PassaBaixa,
-        [Display(Name = "Prewitt")]
-        Prewitt,
+        [Display(Name = "Prewitt Hx")]
+        PrewittHx,
+        [Display(Name = "Prewitt Hy Hx")]
+        PrewittHyHx,
         [Display(Name = "Quantização")]
         Quantização,
         [Display(Name = "Rotação Anti-horária")]
         RotaçãoAnti,
         [Display(Name = "Rotação no Sentido Horário")]
         Rotação,
-        [Display(Name = "Sobel")]
-        Sobel,
+        [Display(Name = "Sobel Hx")]
+        SobelHx,
+        [Display(Name = "Sobel Hy")]
+        SobelHy,
         [Display(Name = "ZoomIn")]
         ZoomIn,
         [Display(Name = "ZoomOut")]
