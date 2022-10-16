@@ -14,8 +14,10 @@ namespace ProjectWebMVC.Models.Enum
         GrayConvertion,
         [Display(Name = "Equalização")]
         Equalization,
-        [Display(Name = "Espelhamento")]
-        Mirroring,
+        [Display(Name = "Espelhamento Horizontal")]
+        MirroringHorizontal,
+        [Display(Name = "Espelhamento Vertical")]
+        MirroringVertical,
         [Display(Name = "Gaussiano")]
         Gaussiano,
         [Display(Name = "Histograma")]
