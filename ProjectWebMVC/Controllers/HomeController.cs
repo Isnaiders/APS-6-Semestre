@@ -49,6 +49,17 @@ namespace ProjectWebMVC.Controllers
                 return View(model);
             }
 
+            string savePath = serverPath + "\\images\\";
+
+            if (!Directory.Exists(savePath))
+                Directory.CreateDirectory(savePath);
+
+            using (var stream = System.IO.File.Create(savePath + model.Image.FileName))
+            {
+                model.Image.CopyToAsync(stream);
+                model.OriginImage = new Bitmap(stream);
+            }
+
             switch (model.Type)
             {
                 case Models.Enum.FilterType.Unknown:
@@ -126,7 +137,7 @@ namespace ProjectWebMVC.Controllers
 
                     Int32 gs = (Int32)(c.R * 0.3 + c.G * 0.59 + c.B * 0.11);
                     Vcin2[gs]++;
-                    int trasn = imagem.GetPixel(x, y).A;
+                    int trasn = image.GetPixel(x, y).A;
                     grayScale.SetPixel(x, y, Color.FromArgb(trasn, gs, gs, gs));
                 }
             }

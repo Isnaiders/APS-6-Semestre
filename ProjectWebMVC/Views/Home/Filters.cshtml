@@ -11,60 +11,59 @@
 @*@Html.ValidationSummary(false, "", new { @class = "text-danger" })*@
 
 <form method="post" enctype="multipart/form-data">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="ibox">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="image-container">
-                            @if (imageName == null)
-                            {
-                                <img src="/img/no-image.jpg" id="image" />
-                            }
-                            else
-                            {
-                                <img src="/images/@imageName" id="image" />
-                            }
-                        </div>
-                        <div>
-                            <button class="clean" style="">
-                                <label>Escolha a sua imagem para upload</label>
-                                <input type="file" name="Image" />
+	@Html.Hidden("Image", Model.Image)
+	<div class="row">
+		<div class="col-md-12">
+			<div class="ibox">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="image-container">
+							@if (imageName == null)
+							{
+								<img src="/img/no-image.jpg" id="image" />
+							}
+							else
+							{
+								<img src="/images/@imageName" id="image" />
+							}
+						</div>
+						<div>
+							<button class="clean" style="">
+								<label>Escolha a sua imagem para upload</label>
+								<input type="file" name="Image" />
 								<button type="submit" class="btn btn-success" value="Escolha uma Imagem" alt="Selecione uma imagem"></button>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label class="control-label"> Selecione o Filtro:</label>
-                            <select asp-for="Type" asp-items="Html.GetEnumSelectList<FilterType>()"></select>
-                        </div>
-                        <form method="post" enctype="multipart/form-data">
-						    <div class="col-md-12">
-							    <div class="wrapper">
-								    <input type="submit" name="filtrar" alt="Aplicar filtro" class="btn btn-success" value="Aplicar" multiple />
-							    </div>
-						    </div>
-					    </form>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="image-container">
-                            <img src="/Img/no-image.jpg" id="image" />
-                        </div>
-                        <div>
-                            <button class="clean" style="">
-                                Selecione uma imagem
-                                <input type="file" name="arquivos" alt="Selecione uma imagem" class="btn btn-success" multiple />
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+							</button>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label class="control-label"> Selecione o Filtro:</label>
+							<select asp-for="Type" asp-items="Html.GetEnumSelectList<FilterType>()"></select>
+						</div>
+						<div class="col-md-12">
+							<div class="wrapper">
+								<input type="submit" name="filtrar" alt="Aplicar filtro" class="btn btn-success" value="Aplicar" multiple />
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="image-container">
+							<img src="/Img/no-image.jpg" id="image" />
+						</div>
+						<div>
+							<button class="clean" style="">
+								Selecione uma imagem
+								<input type="file" name="arquivos" alt="Selecione uma imagem" class="btn btn-success" multiple />
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </form>
 @section Scripts {
 	@{
 		await Html.RenderPartialAsync("_ValidationScriptsPartial");
 	}
-}
+	}

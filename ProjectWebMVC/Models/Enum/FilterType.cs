@@ -6,11 +6,11 @@ namespace ProjectWebMVC.Models.Enum
     {
         [Display(Name = "Não Selecionado")]
         Unknown,
-        [Display(Name = "ConversãoCinza")]
+        [Display(Name = "Conversão Cinza")]
         ConversãoCinza,
-        [Display(Name = "PassaBaixa")]
+        [Display(Name = "Passa Baixa")]
         PassaBaixa,
-        [Display(Name = "PassaAlta")]
+        [Display(Name = "Passa Alta")]
         PassaAlta,
         [Display(Name = "Gaussiano")]
         Gaussiano,
@@ -38,9 +38,9 @@ namespace ProjectWebMVC.Models.Enum
         ZoomIn,
         [Display(Name = "ZoomOut")]
         ZoomOut,
-        [Display(Name = "RotaçãoAnti")]
+        [Display(Name = "Rotação Anti-horária")]
         RotaçãoAnti,
-        [Display(Name = "Rotação")]
+        [Display(Name = "Rotação no Sentido Horário")]
         Rotação
     }
 }
