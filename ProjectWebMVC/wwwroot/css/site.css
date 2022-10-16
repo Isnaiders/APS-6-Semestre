@@ -35,9 +35,30 @@ footer {
     margin-bottom: 25px;
 }
 
-/*input[type = 'file'] {
-    display: none;
-}*/
+input::file-selector-button {
+    text-align: center;
+    display: inline-block;
+    font-size: 14px;
+    padding: 9px 22px;
+    min-width: 150px;
+    background: #ddd;
+    border: 2px #f0f5eb;
+    border-radius: 3px;
+    box-shadow: rgb(0 0 0 / 50%) 0px 2px 1px !important;
+    color: black;
+    letter-spacing: .5px;
+    line-height: inherit;
+    width: 100%;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in-out;
+}
+
+input::file-selector-button:hover {
+    background-color: black;
+    color: white;
+}
 
 .clean {
     text-align: center;
@@ -59,10 +80,10 @@ footer {
     transition-timing-function: ease-in-out;
 }
 
-    .clean:hover {
-        background-color: black;
-        color: white;
-    }
+.clean:hover {
+    background-color: black;
+    color: white;
+}
 
 .image-container {
     background-color: transparent;
