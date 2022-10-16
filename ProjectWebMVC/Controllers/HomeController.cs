@@ -57,7 +57,7 @@ namespace ProjectWebMVC.Controllers
         [HttpPost]
         public IActionResult Filters(FiltersViewModel model)
         {
-            if (model.File == null)
+            if (model.Image == null)
             {
                 ModelState.AddModelError("File", "Nenhuma imagem foi selecionada");
                 return View(model);
