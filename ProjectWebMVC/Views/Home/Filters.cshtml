@@ -1,4 +1,5 @@
-﻿@model FiltersViewModel
+﻿@using ProjectWebMVC.Models.Enum
+@model FiltersViewModel
 @{
     string imageName = Model.Image?.FileName;
 }
@@ -9,109 +10,61 @@
 
 @*@Html.ValidationSummary(false, "", new { @class = "text-danger" })*@
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="ibox">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="image-container">
-                        
-                        @if (imageName == null)
-                        {
-                            <img src="/img/no-image.jpg" id="image" />
-                        }
-                        else
-                        {
-                            <img src="/images/@imageName" id="image" />
-                        }
-                    </div>
-                    <div>
-                        <button class="clean" style="">
-                            Selecione uma imagem
-                            <form method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="ibox">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="image-container">
+
+                            @if (imageName == null)
+                            {
+                                <img src="/img/no-image.jpg" id="image" />
+                            }
+                            else
+                            {
+                                <img src="/images/@imageName" id="image" />
+                            }
+                        </div>
+                        <div>
+                            <button class="clean" style="">
                                 <label>Escolha a sua imagem para upload</label>
                                 <input type="submit" name="arquivos" alt="Selecione uma imagem" class="btn btn-success" value="Aplicar" multiple />
                                 <input type="file" name="Image" />
-                            </form>
-
-                        </button>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label class="control-label"> Select City</label>
-                        <select name="products" class="form-control" asp-items="@ViewBag.cities"></select>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="wrapper">
-                            <a href="#">HOVER ME</a>
+                            </button>
                         </div>
-                    </div>                    
-                </div>
-                <div class="col-md-4">
-                    <div class="image-container">
-                        <img src="/Img/no-image.jpg" id="image" />
                     </div>
-                    <div>
-                        <button class="clean" style="">
-                            Selecione uma imagem
-                            <input type="file" name="arquivos" alt="Selecione uma imagem" class="btn btn-success" multiple />
-                        </button>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label"> Selecione o Filtro:</label>
+                            <select asp-for="Type" asp-items="Html.GetEnumSelectList<FilterType>()"></select>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="wrapper">
+                                <a href="#">HOVER ME</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="image-container">
+                            <img src="/Img/no-image.jpg" id="image" />
+                        </div>
+                        <div>
+                            <button class="clean" style="">
+                                Selecione uma imagem
+                                <input type="file" name="arquivos" alt="Selecione uma imagem" class="btn btn-success" multiple />
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <hr />
-
-    <div class="col-md-12">
-        <div class="ibox">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-        </div>
-    </div>
-    @*<div class="col-md-6">
-    <div class="ibox">
-    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-    </div>
-    </div>*@
-
-</div>
+</form>
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-}
-
-
-
-
-
-
-    @*Ajustar - culpa do Back*@
-    @*<form method="post" enctype="multipart/form-data">
-	<label>Escolha a sua imagem para upload</label>
-	<br />
-	<br />
-	<input type="file" name="Image" />
-	<br />
-	<br />
-	<button type="submit" class="btn btn-danger">Enviar Imagem</button>
-</form>
-
-@if (imageName != null)
-{
-	<img src="/images/@imageName" />
-}
-
-@section Scripts {
-	@{
-		await Html.RenderPartialAsync("_ValidationScriptsPartial");
-	}
-
-	<script>
-		$(document).on('change', '#textBoxImage', function () {
-			console.log("entrei no change");
-		})
-	</script>
-}*@
+    }

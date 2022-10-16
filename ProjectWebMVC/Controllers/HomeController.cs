@@ -6,6 +6,7 @@ using System.Security.Permissions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ProjectWebMVC.Models;
+using ProjectWebMVC.Models.Enum;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace ProjectWebMVC.Controllers
@@ -34,22 +35,6 @@ namespace ProjectWebMVC.Controllers
         {
             var model = new FiltersViewModel();
             ViewData["Title"] = "Filters";
-
-            List<SelectListItem> cities = new()
-            {
-                new SelectListItem { Value = "1", Text = "Latur" },
-                new SelectListItem { Value = "2", Text = "Solapur" },
-                new SelectListItem { Value = "3", Text = "Nanded" },
-                new SelectListItem { Value = "4", Text = "Nashik" },
-                new SelectListItem { Value = "5", Text = "Nagpur" },
-                new SelectListItem { Value = "6", Text = "Kolhapur" },
-                new SelectListItem { Value = "7", Text = "Pune" },
-                new SelectListItem { Value = "8", Text = "Mumbai" },
-                new SelectListItem { Value = "9", Text = "Delhi" },
-                new SelectListItem { Value = "10", Text = "Noida" }
-            };
-
-            ViewBag.cities = cities;
 
             return View(model);
         }
@@ -121,12 +106,6 @@ namespace ProjectWebMVC.Controllers
 
             return View(model);
         }
-
-        //public Bitmap GetImage()
-        //{
-        //    WebImage fileName = WebImage
-        //    return Image.FromFile(fileName);
-        //}
 
         private Bitmap GrayConvertion(Bitmap image)
         {

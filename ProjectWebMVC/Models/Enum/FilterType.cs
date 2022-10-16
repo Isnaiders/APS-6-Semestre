@@ -1,25 +1,46 @@
-﻿namespace ProjectWebMVC.Models.Enum
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ProjectWebMVC.Models.Enum
 {
-    public enum FilterType : int
+    public enum FilterType
     {
-        Unknown = 0,
-        ConversãoCinza = 1,
-        PassaBaixa = 2,
-        PassaAlta = 3,
-        Gaussiano = 4,
-        Laplaciano = 5,
-        Prewitt = 6,
-        Sobel = 7,
-        Histograma = 8,
-        Equalização = 9,
-        Brilho = 10,
-        Contraste = 11,
-        Negativo = 12,
-        Espelhamento = 13,
-        Quantização = 14,
-        ZoomIn = 15,
-        ZoomOut = 16,
-        RotaçãoAnti = 17,
-        Rotação = 18
+        [Display(Name = "Não Selecionado")]
+        Unknown,
+        [Display(Name = "ConversãoCinza")]
+        ConversãoCinza,
+        [Display(Name = "PassaBaixa")]
+        PassaBaixa,
+        [Display(Name = "PassaAlta")]
+        PassaAlta,
+        [Display(Name = "Gaussiano")]
+        Gaussiano,
+        [Display(Name = "Laplaciano")]
+        Laplaciano,
+        [Display(Name = "Prewitt")]
+        Prewitt,
+        [Display(Name = "Sobel")]
+        Sobel,
+        [Display(Name = "Histograma")]
+        Histograma,
+        [Display(Name = "Equalização")]
+        Equalização,
+        [Display(Name = "Brilho")]
+        Brilho,
+        [Display(Name = "Contraste")]
+        Contraste,
+        [Display(Name = "Negativo")]
+        Negativo,
+        [Display(Name = "Espelhamento")]
+        Espelhamento,
+        [Display(Name = "Quantização")]
+        Quantização,
+        [Display(Name = "ZoomIn")]
+        ZoomIn,
+        [Display(Name = "ZoomOut")]
+        ZoomOut,
+        [Display(Name = "RotaçãoAnti")]
+        RotaçãoAnti,
+        [Display(Name = "Rotação")]
+        Rotação
     }
 }
