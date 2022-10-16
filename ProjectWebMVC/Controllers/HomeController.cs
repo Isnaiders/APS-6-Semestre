@@ -36,6 +36,20 @@ namespace ProjectWebMVC.Controllers
         }
 
         [HttpPost]
+        public IActionResult Upload(IFormFile image)
+        {
+            string savePath = serverPath + "\\images\\";
+
+            if (!Directory.Exists(savePath))
+                Directory.CreateDirectory(savePath);
+
+            using (var stream = System.IO.File.Create(savePath + image.FileName))
+                image.CopyToAsync(stream);
+
+            return RedirectToAction("Upload");
+        }
+
+        [HttpPost]
         public IActionResult Filters(FiltersViewModel model)
         {
             string savePath = serverPath + "\\images\\";
