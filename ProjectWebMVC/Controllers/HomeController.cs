@@ -10,7 +10,7 @@ namespace ProjectWebMVC.Controllers
     {
         private string serverPath;
         private readonly ILogger<HomeController> _logger;
-        private Bitmap imagem;
+        private Bitmap image;
         private Bitmap nova_imagem;
         public int[] Vcin = new int[256];
         public int[] Vcin2 = new int[256];
@@ -70,10 +70,10 @@ namespace ProjectWebMVC.Controllers
                     model.FilteredImageBit = GrayConvertion(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.PassaBaixa:
-                    //model.FilteredImageBit = PassaBaixa(model.OriginImageBit);
+                    //model.FilteredImageBit = LowPass(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.PassaAlta:
-                    model.FilteredImageBit = PassaAlta(model.OriginImageBit);
+                    model.FilteredImageBit = HighPass(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.Gaussiano:
                     model.FilteredImageBit = Gaussiano(model.OriginImageBit);
@@ -100,13 +100,13 @@ namespace ProjectWebMVC.Controllers
                     //model.FilteredImageBit = Contraste(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.Negativo:
-                    //model.FilteredImageBit = Negativo(model.OriginImageBit);
+                    model.FilteredImageBit = Negative(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.Espelhamento:
                     //model.FilteredImageBit = Espelhamento(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.Quantização:
-                    model.FilteredImageBit = Quantizacao(model.OriginImageBit);
+                    model.FilteredImageBit = Quantization(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.ZoomIn:
                     //model.FilteredImageBit = ZoomIn(model.OriginImageBit);
@@ -174,7 +174,6 @@ namespace ProjectWebMVC.Controllers
 
         //    return RedirectToAction("Filters", model);
         //}
-
 
         private Bitmap Gaussiano(Bitmap image)
         {
@@ -282,93 +281,124 @@ namespace ProjectWebMVC.Controllers
             return grayScale;
         }
 
-
-        private Bitmap PassaAlta(Bitmap image)
+        private Bitmap HighPass(Bitmap image)
         {
             try
             {
-                    int i = 0;
-                    int u = 0;
-                    double colorR = 0;
-                    double colorG = 0;
-                    double colorB = 0;
-                    int h = image.Width;
-                    int v = image.Height;
-                    nova_imagem = new Bitmap(h, v);
+                int i = 0;
+                int u = 0;
+                double colorR = 0;
+                double colorG = 0;
+                double colorB = 0;
+                int h = image.Width;
+                int v = image.Height;
+                nova_imagem = new Bitmap(h, v);
 
 
-                    while (i < v)
+                while (i < v)
+                {
+                    while (u < h)
                     {
-                        while (u < h)
+                        if (u == 0 || i == 0 || u == h - 1 || i == v - 1)
                         {
-                            if (u == 0 || i == 0 || u == h - 1 || i == v - 1)
-                            {
-                                nova_imagem.SetPixel(u, i, image.GetPixel(u, i));
-                            }
-                            else
-                            {
-                                colorR = image.GetPixel(u - 1, i - 1).R * -1 +
-                                         image.GetPixel(u, i - 1).R * -1 +
-                                         image.GetPixel(u + 1, i - 1).R * -1 +
-                                         image.GetPixel(u - 1, i).R * -1 +
-                                         image.GetPixel(u, i).R * 8 +
-                                         image.GetPixel(u + 1, i).R * -1 +
-                                         image.GetPixel(u - 1, i + 1).R * -1 +
-                                         image.GetPixel(u, i + 1).R * -1 +
-                                         image.GetPixel(u + 1, i + 1).R * -1;
-
-                                colorG = image.GetPixel(u - 1, i - 1).G * -1 +
-                                        image.GetPixel(u, i - 1).G * -1 +
-                                        image.GetPixel(u + 1, i - 1).G * -1 +
-                                        image.GetPixel(u - 1, i).G * -1 +
-                                        image.GetPixel(u, i).G * 8 +
-                                        image.GetPixel(u + 1, i).G * -1 +
-                                        image.GetPixel(u - 1, i + 1).G * -1 +
-                                        image.GetPixel(u, i + 1).G * -1 +
-                                        image.GetPixel(u + 1, i + 1).G * -1;
-
-                                colorB = image.GetPixel(u - 1, i - 1).B * -1 +
-                                       image.GetPixel(u, i - 1).B * -1 +
-                                       image.GetPixel(u + 1, i - 1).B * -1 +
-                                       image.GetPixel(u - 1, i).B * -1 +
-                                       image.GetPixel(u, i).B * 8 +
-                                       image.GetPixel(u + 1, i).B * -1 +
-                                       image.GetPixel(u - 1, i + 1).B * -1 +
-                                       image.GetPixel(u, i + 1).B * -1 +
-                                       image.GetPixel(u + 1, i + 1).B * -1;
-
-                                if (colorB > 255)
-                                    colorB = 255;
-                                else if (colorB < 0)
-                                    colorB = 0;
-
-
-                                if (colorR > 255)
-                                    colorR = 255;
-                                else if (colorR < 0)
-                                    colorR = 0;
-
-                                if (colorG > 255)
-                                    colorG = 255;
-                                else if (colorG < 0)
-                                    colorG = 0;
-
-
-                                nova_imagem.SetPixel(u, i, Color.FromArgb(image.GetPixel(u, i).A, Convert.ToInt32(colorR), Convert.ToInt32(colorG), Convert.ToInt32(colorB)));
-                            }
-
-                            u = u + 1;
-
+                            nova_imagem.SetPixel(u, i, image.GetPixel(u, i));
                         }
-                        u = 0;
-                        i = i + 1;
+                        else
+                        {
+                            colorR = image.GetPixel(u - 1, i - 1).R * -1 +
+                                     image.GetPixel(u, i - 1).R * -1 +
+                                     image.GetPixel(u + 1, i - 1).R * -1 +
+                                     image.GetPixel(u - 1, i).R * -1 +
+                                     image.GetPixel(u, i).R * 8 +
+                                     image.GetPixel(u + 1, i).R * -1 +
+                                     image.GetPixel(u - 1, i + 1).R * -1 +
+                                     image.GetPixel(u, i + 1).R * -1 +
+                                     image.GetPixel(u + 1, i + 1).R * -1;
+
+                            colorG = image.GetPixel(u - 1, i - 1).G * -1 +
+                                    image.GetPixel(u, i - 1).G * -1 +
+                                    image.GetPixel(u + 1, i - 1).G * -1 +
+                                    image.GetPixel(u - 1, i).G * -1 +
+                                    image.GetPixel(u, i).G * 8 +
+                                    image.GetPixel(u + 1, i).G * -1 +
+                                    image.GetPixel(u - 1, i + 1).G * -1 +
+                                    image.GetPixel(u, i + 1).G * -1 +
+                                    image.GetPixel(u + 1, i + 1).G * -1;
+
+                            colorB = image.GetPixel(u - 1, i - 1).B * -1 +
+                                   image.GetPixel(u, i - 1).B * -1 +
+                                   image.GetPixel(u + 1, i - 1).B * -1 +
+                                   image.GetPixel(u - 1, i).B * -1 +
+                                   image.GetPixel(u, i).B * 8 +
+                                   image.GetPixel(u + 1, i).B * -1 +
+                                   image.GetPixel(u - 1, i + 1).B * -1 +
+                                   image.GetPixel(u, i + 1).B * -1 +
+                                   image.GetPixel(u + 1, i + 1).B * -1;
+
+                            if (colorB > 255)
+                                colorB = 255;
+                            else if (colorB < 0)
+                                colorB = 0;
+
+
+                            if (colorR > 255)
+                                colorR = 255;
+                            else if (colorR < 0)
+                                colorR = 0;
+
+                            if (colorG > 255)
+                                colorG = 255;
+                            else if (colorG < 0)
+                                colorG = 0;
+
+
+                            nova_imagem.SetPixel(u, i, Color.FromArgb(image.GetPixel(u, i).A, Convert.ToInt32(colorR), Convert.ToInt32(colorG), Convert.ToInt32(colorB)));
+                        }
+
+                        u = u + 1;
+
                     }
+                    u = 0;
+                    i = i + 1;
+                }
             }
             catch { }
             return nova_imagem;
         }
 
-        private Bitmap Quantizacao(Bitmap image)
+        private Bitmap Negative(Bitmap image)
+        {
+            try
+            {
+                int h = image.Width;
+                int v = image.Height;
+                int faixaR = 0;
+                int faixaG = 0;
+                int faixaB = 0;
+                nova_imagem = new Bitmap(image.Width, image.Height);
+                int i, u;
+                for (i = 0; i < v; i++)
+                {
+                    for (u = 0; u < h; u++)
+                    {
+                        faixaR = 255 - image.GetPixel(u, i).R;
+
+                        faixaG = 255 - image.GetPixel(u, i).G;
+
+                        faixaB = 255 - image.GetPixel(u, i).B;
+
+                        int trasn = image.GetPixel(u, i).A;
+
+                        nova_imagem.SetPixel(u, i, Color.FromArgb(trasn, faixaR, faixaG, faixaB));
+                    }
+                }
+            }
+            catch { }
+
+            return nova_imagem;
+        }
+
+        private Bitmap Quantization(Bitmap image)
         {
             try
             {
