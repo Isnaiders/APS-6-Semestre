@@ -175,5 +175,8 @@ input::file-selector-button:hover {
 .drop-select:hover {
     background: #c9cce8;
 }
-
+a:link, a:visited, a:hover, a:active {
+    color: #000000;
+    text-decoration: none;
+}
 
