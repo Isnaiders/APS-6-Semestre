@@ -64,6 +64,7 @@ input::file-selector-button:hover {
 .clean {
     text-align: center;
     display: inline-block;
+    line-height: 40px;
     font-size: 14px;
     padding: 9px 22px;
     min-width: 150px;
@@ -174,3 +175,5 @@ input::file-selector-button:hover {
 .drop-select:hover {
     background: #c9cce8;
 }
+
+
