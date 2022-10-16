@@ -34,11 +34,12 @@
 					<div class="col-md-4">
 						<div class="form-group">
 							<label class="control-label"> Selecione o Filtro:</label>
-							<select asp-for="Type" asp-items="Html.GetEnumSelectList<FilterType>()"></select>
+							<select asp-for="Type"  class="drop-select" asp-items="Html.GetEnumSelectList<FilterType>()"></select>
 						</div>
 						<div class="col-md-12">
 							<div class="wrapper">
-								<input type="submit" name="filtrar" alt="Aplicar filtro" class="btn btn-success" value="Aplicar" multiple />
+								<buuton type="submit" class="btn-slide"><span>Aplicar</span></buuton>
+								@*<input type="submit" name="filtrar" alt="Aplicar filtro" class="btn-slide" value="Aplicar" multiple />*@
 							</div>
 						</div>
 					</div>

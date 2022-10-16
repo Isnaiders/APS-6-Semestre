@@ -1,6 +1,7 @@
 html {
     background-color: white;
     font-size: 14px;
+    background-image: linear-gradient(to right, #87e6db, #e687e6);
 }
 
 @media (min-width: 768px) {
@@ -15,6 +16,7 @@ html {
 }
 
 body {
+    background-image: linear-gradient(to right, #87e6db, #e687e6);
     margin-bottom: 60px;
 }
 
@@ -56,8 +58,7 @@ input::file-selector-button {
 }
 
 input::file-selector-button:hover {
-    background-color: black;
-    color: white;
+    background-color: #c9cce8;
 }
 
 .clean {
@@ -81,8 +82,7 @@ input::file-selector-button:hover {
 }
 
 .clean:hover {
-    background-color: black;
-    color: white;
+    background-color: #c9cce8;
 }
 
 .image-container {
@@ -96,14 +96,16 @@ input::file-selector-button:hover {
     width: 100%;
 }
 
-/*.wrapper {
-    position: fixed;
+.wrapper {
+    margin-top: 10px;
+    margin-botton: 10px;
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
-a {
+.btn-slide {
     display: block;
     width: 200px;
     height: 40px;
@@ -112,33 +114,63 @@ a {
     font-family: sans-serif;
     text-decoration: none;
     color: #333;
-    border: 2px solid #333;
+    border: 2px #f0f5eb;
     letter-spacing: 2px;
     text-align: center;
     position: relative;
     transition: all .35s;
+    box-shadow: rgb(0 0 0 / 50%) 0px 2px 1px !important;
+    border-radius: 3px;
+    background: #ddd;
 }
 
-a span {
+.btn-slide span {
     position: relative;
     z-index: 2;
 }
 
-a:after {
+.btn-slide:after {
     position: absolute;
     content: "";
     top: 0;
     left: 0;
     width: 0;
     height: 100%;
-    background: #ff003b;
+    /*background: #444ca2;*/
+    background: #8187ca;
+    /*background: #6f76c3;*/
+    /*background: #5d65bb;*/
     transition: all .35s;
+    border-radius: 3px;
 }
 
-a:hover {
+.btn-slide:hover {
     color: #fff;
 }
 
-a:hover:after {
+.btn-slide:hover:after {
     width: 100%;
-}*/
+}
+
+.drop-select {
+    text-align: center;
+    display: inline-block;
+    font-size: 14px;
+    padding: 9px 0px;
+    min-width: 150px;
+    background: #ddd;
+    border: 2px #f0f5eb;
+    border-radius: 3px;
+    box-shadow: rgb(0 0 0 / 50%) 0px 2px 1px !important;
+    color: black;
+    letter-spacing: .5px;
+    line-height: inherit;
+    width: 100%;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in-out;
+}
+.drop-select:hover {
+    background: #c9cce8;
+}
