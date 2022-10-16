@@ -7,37 +7,37 @@ namespace ProjectWebMVC.Models.Enum
         [Display(Name = "Não Selecionado")]
         Unknown,
         [Display(Name = "Brilho")]
-        Brilho,
+        Shine,
         [Display(Name = "Contraste")]
-        Contraste,
+        Contrast,
         [Display(Name = "Conversão Cinza")]
-        ConversãoCinza,
+        GrayConvertion,
         [Display(Name = "Equalização")]
-        Equalização,
+        Equalization,
         [Display(Name = "Espelhamento")]
-        Espelhamento,
+        Mirroring,
         [Display(Name = "Gaussiano")]
         Gaussiano,
         [Display(Name = "Histograma")]
-        Histograma,
+        Histogram,
         [Display(Name = "Laplaciano")]
         Laplaciano,
         [Display(Name = "Negativo")]
-        Negativo,
+        Negative,
         [Display(Name = "Passa Alta")]
-        PassaAlta,
+        HighPass,
         [Display(Name = "Passa Baixa")]
-        PassaBaixa,
+        LowPass,
         [Display(Name = "Prewitt Hx")]
         PrewittHx,
         [Display(Name = "Prewitt Hy Hx")]
         PrewittHyHx,
         [Display(Name = "Quantização")]
-        Quantização,
+        Quantization,
         [Display(Name = "Rotação Anti-horária")]
-        RotaçãoAnti,
+        AntiClockwiseRotation,
         [Display(Name = "Rotação no Sentido Horário")]
-        Rotação,
+        ClockwiseRotationion,
         [Display(Name = "Sobel Hx")]
         SobelHx,
         [Display(Name = "Sobel Hy")]
