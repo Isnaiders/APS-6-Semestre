@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Security.Permissions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -63,17 +64,6 @@ namespace ProjectWebMVC.Controllers
                 return View(model);
             }
 
-            string savePath = serverPath + "\\images\\";
-
-            if (!Directory.Exists(savePath))
-                Directory.CreateDirectory(savePath);
-
-            using (var stream = System.IO.File.Create(savePath + model.Image.FileName))
-            {
-                model.Image.CopyToAsync(stream);
-                model.OriginImage = new Bitmap(stream);
-            }
-
             switch (model.Type)
             {
                 case Models.Enum.FilterType.Unknown:
@@ -122,11 +112,22 @@ namespace ProjectWebMVC.Controllers
             return View(model);
         }
 
-        //public Bitmap GetImage()
-        //{
-        //    WebImage fileName = WebImage
-        //    return Image.FromFile(fileName);
-        //}
+        [HttpPost]
+        public IActionResult GetImage(FiltersViewModel model)
+        {
+            string savePath = serverPath + "\\images\\";
+
+            if (!Directory.Exists(savePath))
+                Directory.CreateDirectory(savePath);
+
+            using (var stream = System.IO.File.Create(savePath + model.Image.FileName))
+            {
+                model.Image.CopyToAsync(stream);
+                model.OriginImage = new Bitmap(stream);
+            }
+
+            return RedirectToAction("Filters", model);
+        }
 
         private Bitmap GrayConvertion(Bitmap image)
         {

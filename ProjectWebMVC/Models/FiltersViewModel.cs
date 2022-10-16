@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Drawing;
+﻿using System.Drawing;
 using ProjectWebMVC.Models.Enum;
 
 namespace ProjectWebMVC.Models
@@ -11,7 +10,6 @@ namespace ProjectWebMVC.Models
         }
 
         public IFormFile Image { get; set; }
-        public string File { get; set; }
         public Bitmap OriginImage { get; set; }
         public Bitmap FilteredImage { get; set; }
         public FilterType Type { get; set; }
