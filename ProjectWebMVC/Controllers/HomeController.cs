@@ -3,6 +3,7 @@ using ProjectWebMVC.Models;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ProjectWebMVC.Controllers
 {
@@ -11,6 +12,7 @@ namespace ProjectWebMVC.Controllers
         private string serverPath;
         private readonly ILogger<HomeController> _logger;
         private Bitmap nova_imagem;
+        private Bitmap nova_imagem1;
         public int[] Vcin = new int[256];
         public int[] Vcin2 = new int[256];
 
@@ -75,7 +77,7 @@ namespace ProjectWebMVC.Controllers
                     model.FilteredImageBit = GrayConvertion(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.Equalization:
-                    //model.FilteredImageBit = Equalização(model.OriginImageBit);
+                    model.FilteredImageBit = Equalization(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.Mirroring:
                     //model.FilteredImageBit = Espelhamento(model.OriginImageBit);
@@ -199,6 +201,96 @@ namespace ProjectWebMVC.Controllers
             }
 
             return grayScale;
+        }
+
+
+        private Bitmap Equalization(Bitmap image)
+        {
+            try
+            {
+                int h = 0, v = 0, i = 0;
+
+                h = image.Width;
+                v = image.Height;
+                nova_imagem = GrayConvertion(image);
+
+                double a = 255.0 / (Convert.ToDouble(h) * Convert.ToDouble(v));
+                int[] Vcin_cumR = new int[256];
+                int[] Vcin_cumG = new int[256];
+                int[] Vcin_cumB = new int[256];
+
+                int[] VcinR = new int[256];
+                int[] VcinG = new int[256];
+                int[] VcinB = new int[256];
+
+                int x = 0, y = 0;
+                for (y = 0; y < image.Height; y++)
+                    for (x = 0; x < image.Width; x++)
+                    {
+                        Color c = image.GetPixel(x, y);
+                        VcinR[c.R]++;
+                        VcinG[c.G]++;
+                        VcinB[c.B]++;
+                    }
+
+                Vcin_cumR[0] = Convert.ToInt32(a * Convert.ToDouble(VcinR[0]));
+                for (i = 1; i <= 255; i++)
+                {
+                    Vcin_cumR[i] = Vcin_cumR[i - 1] + Convert.ToInt32(a * Convert.ToDouble(VcinR[i]));
+                    if (Vcin_cumR[i] > 255)
+                        Vcin_cumR[i] = 255;
+                    else if (Vcin_cumR[i] < 0)
+                        Vcin_cumR[i] = 0;
+                }
+
+                Vcin_cumG[0] = Convert.ToInt32(a * Convert.ToDouble(VcinG[0]));
+                for (i = 1; i <= 255; i++)
+                {
+                    Vcin_cumG[i] = Vcin_cumG[i - 1] + Convert.ToInt32(a * Convert.ToDouble(VcinG[i]));
+                    if (Vcin_cumG[i] > 255)
+                        Vcin_cumG[i] = 255;
+                    else if (Vcin_cumG[i] < 0)
+                        Vcin_cumG[i] = 0;
+                }
+
+
+                Vcin_cumB[0] = Convert.ToInt32(a * Convert.ToDouble(VcinB[0]));
+                for (i = 1; i <= 255; i++)
+                {
+                    Vcin_cumB[i] = Vcin_cumB[i - 1] + Convert.ToInt32(a * Convert.ToDouble(VcinB[i]));
+                    if (Vcin_cumB[i] > 255)
+                        Vcin_cumB[i] = 255;
+                    else if (Vcin_cumB[i] < 0)
+                        Vcin_cumB[i] = 0;
+                }
+
+
+                nova_imagem1 = new Bitmap(h, v);
+
+                for (x = 0; x < h; x++)
+                {
+                    for (y = 0; y < v; y++)
+                    {
+                        int trasn = image.GetPixel(x, y).A;
+                        int auxR = image.GetPixel(x, y).R;
+                        int auxG = image.GetPixel(x, y).G;
+                        int auxB = image.GetPixel(x, y).B;
+                        int r = Vcin_cumR[auxR];
+                        int g = Vcin_cumG[auxG];
+                        int b = Vcin_cumB[auxB];
+                        nova_imagem1.SetPixel(x, y, Color.FromArgb(trasn, r, g, b));
+                    }
+                }
+                //pictureBox2.Image = nova_imagem1;
+
+                //GrayConvertion(nova_imagem1);
+                //Form3 newForm3 = new Form3();
+                //newForm3.Vcin1 = Vcin2;
+                //newForm3.Show();
+            }
+            catch { }
+
+            return nova_imagem1;
         }
 
         private Bitmap Gaussiano(Bitmap image)
