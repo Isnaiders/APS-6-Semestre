@@ -18,7 +18,8 @@ namespace ProjectWebMVC.Controllers
     {
         private string serverPath;
         private readonly ILogger<HomeController> _logger;
-        public Bitmap imagem;
+        private Bitmap imagem;
+        private Bitmap nova_imagem;
         public int[] Vcin = new int[256];
         public int[] Vcin2 = new int[256];
 
@@ -77,38 +78,55 @@ namespace ProjectWebMVC.Controllers
                     model.FilteredImageBit = GrayConvertion(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.PassaBaixa:
+                    //model.FilteredImageBit = PassaBaixa(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.PassaAlta:
+                    //model.FilteredImageBit = PassaAlta(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.Gaussiano:
+                    //model.FilteredImageBit = Gaussiano(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.Laplaciano:
+                    //model.FilteredImageBit = Laplaciano(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.Prewitt:
+                    //model.FilteredImageBit = Prewitt(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.Sobel:
+                    //model.FilteredImageBit = Sobel(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.Histograma:
+                    //model.FilteredImageBit = Histograma(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.Equalização:
+                    //model.FilteredImageBit = Equalização(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.Brilho:
+                    //model.FilteredImageBit = Brilho(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.Contraste:
+                    //model.FilteredImageBit = Contraste(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.Negativo:
+                    //model.FilteredImageBit = Negativo(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.Espelhamento:
+                    //model.FilteredImageBit = Espelhamento(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.Quantização:
+                    model.FilteredImageBit = Quantizacao(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.ZoomIn:
+                    //model.FilteredImageBit = ZoomIn(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.ZoomOut:
+                    //model.FilteredImageBit = ZoomOut(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.RotaçãoAnti:
+                    //model.FilteredImageBit = RotaçãoAnti(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.Rotação:
+                    //model.FilteredImageBit = Rotação(model.OriginImageBit);
                     break;
                 default:
                     break;
@@ -183,6 +201,61 @@ namespace ProjectWebMVC.Controllers
             }
 
             return grayScale;
+        }
+
+        private Bitmap Quantizacao(Bitmap image)
+        {
+            try
+            {
+                //int quan = quan = Convert.ToInt32(valor.Text); // Implementar uma caixa para o usuário digitar o valor da quantização
+                int quan = 16;
+
+                if (quan > 256)
+                    quan = 256;
+                else if (quan <= 0)
+                    quan = 1;
+
+                int dist = 256 / quan;
+
+                int h = image.Width;
+                int v = image.Height;
+                int novo_valorR = 0;
+                int novo_valorG = 0;
+                int novo_valorB = 0;
+                int faixaR = 0;
+                int faixaG = 0;
+                int faixaB = 0;
+                nova_imagem = new Bitmap(image.Width, image.Height);
+                int i, u;
+                for (i = 0; i < v; i++)
+                {
+                    for (u = 0; u < h; u++)
+                    {
+                        faixaR = image.GetPixel(u, i).R / dist;
+                        faixaG = image.GetPixel(u, i).G / dist;
+                        faixaB = image.GetPixel(u, i).B / dist;
+                        int trasn = image.GetPixel(u, i).A;
+
+                        novo_valorR = faixaR * dist + (dist / 2);
+                        novo_valorG = faixaG * dist + (dist / 2);
+                        novo_valorB = faixaB * dist + (dist / 2);
+
+                        if (novo_valorR > 255)
+                            novo_valorR = 255;
+
+                        if (novo_valorG > 255)
+                            novo_valorG = 255;
+
+                        if (novo_valorB > 255)
+                            novo_valorB = 255;
+
+                        nova_imagem.SetPixel(u, i, Color.FromArgb(trasn, novo_valorR, novo_valorG, novo_valorB));
+
+                    }
+                }
+            }
+            catch { }
+            return nova_imagem;
         }
 
         public IActionResult AboutUs()
