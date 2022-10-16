@@ -1,7 +1,8 @@
-﻿@model Program
+﻿@model FiltersViewModel
 
 @{
-    ViewData["Title"] = "Filters";
+	string imageName = Model.Image?.FileName;
+	var list = new List();
 }
 
 <h1>Filters</h1>
@@ -22,6 +23,21 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+<form method="post" enctype="multipart/form-data">
+	<div class="row">
+		<div class="col-md-4 col-lg-4">
+			@*<button class="btn btn-default" type="button" value="Selecione a Imagem" onclick="@Url.Action("GetImage", "Home")"></button>*@
+			@Html.TextBox("File", Model.File, new { @class = "form-control", type = "file", accept = "Image/jpg,Image/jpeg"})
+			@(Html.DropDownList("teste", list))
+		</div>
+		<div class="col-md-4 col-lg-4">
+			<button class="btn btn-default" type="submit" value="Aplicar"></button>
+			<input class="btn btn-primary" type="submit" value="Aplicar" />
+		</div>
+		<div class="col-md-4 col-lg-4">
+			<button class="btn btn-default" type="button" value="Baixar" onclick="@Url.Action("SaveImage", "Home")"></button>
+		</div>
+	</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
