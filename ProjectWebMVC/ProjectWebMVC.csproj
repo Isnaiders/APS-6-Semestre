@@ -11,12 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-<<<<<<< HEAD
-    <None Include="wwwroot\Img\Coca-Cola-Logo-1987.jpg" />
-    <None Include="wwwroot\Img\no-image.jpg" />
-=======
     <Folder Include="wwwroot\images\" />
->>>>>>> 1372778f97afc446670dca1f30143604c2b8a1c1
   </ItemGroup>
 
 </Project>

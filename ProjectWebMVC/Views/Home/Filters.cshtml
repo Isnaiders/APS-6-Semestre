@@ -1,75 +1,3 @@
-<<<<<<< HEAD
-﻿
-@model Program
-
-@{
-    ViewData["Title"] = "Filtragem";
-}
-
-<h1>@ViewData["Title"]</h1>
-<hr />
-@*<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Filters">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>*@
-<div class="row">
-    <div class="col-md-12">
-        <div class="ibox">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="image-container">
-                        <img src="/Img/no-image.jpg" id="image" />
-                    </div>
-                    <div>
-                         <button class="clean" style="">Selecione uma imagem
-                            <input type="file" name="arquivos" alt="Selecione uma imagem"  class="btn btn-success" multiple/>
-                        </button>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="row" style="margin-top: 25%;">
-                        <div>
-                            <button class="btn-apli-filter"><span>Aplicar</span></button>
-                        </div>
-                    </div>                  
-                </div>
-                <div class="col-md-4">
-                    <div class="image-container">
-                        <img src="/Img/no-image.jpg" id="image" />
-                    </div>
-                    <div>
-                         <button class="clean" style="">Selecione uma imagem
-                            <input type="file" name="arquivos" alt="Selecione uma imagem"  class="btn btn-success" multiple/>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <hr />
-
-    <div class="col-md-12">
-        <div class="ibox">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-        </div>
-    </div>
-     @*<div class="col-md-6">
-        <div class="ibox">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-        </div>
-    </div>*@
-
-</div>
-@*<div>
-    <a asp-action="Index">Back to List</a>
-</div>*@
-=======
 ﻿@model FiltersViewModel
 @{
 	string imageName = Model.Image?.FileName;
@@ -78,25 +6,74 @@
 <h1>@ViewData["Title"]</h1>
 
 <h4>Program</h4>
-<hr />
+
+@Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
 <div class="row">
-	<div class="col-md-4">
-		@*<form asp-action="Filters">
-			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-			<div class="form-group">
-				<input type="submit" value="Create" class="btn btn-primary" />
+	<div class="col-md-12">
+		<div class="ibox">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="image-container">
+						<img src="/img/no-image.jpg" id="image" />
+					</div>
+					<div>
+						<button class="clean" style="">
+							Selecione uma imagem
+							<input type="file" name="arquivos" alt="Selecione uma imagem" class="btn btn-success" multiple />
+						</button>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label class="control-label"> Select City</label>
+						<select name="products" class="form-control" asp-items="@ViewBag.cities"></select>
+					</div>
+					<div>
+						<button class="btn-apli-filter"><span>Aplicar</span></button>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="image-container">
+						<img src="/Img/no-image.jpg" id="image" />
+					</div>
+					<div>
+						<button class="clean" style="">
+							Selecione uma imagem
+							<input type="file" name="arquivos" alt="Selecione uma imagem" class="btn btn-success" multiple />
+						</button>
+					</div>
+				</div>
 			</div>
-		</form>*@
+		</div>
 	</div>
+	<hr />
+
+	<div class="col-md-12">
+		<div class="ibox">
+			Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+		</div>
+	</div>
+	@*<div class="col-md-6">
+	<div class="ibox">
+	Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+	</div>
+	</div>*@
+
 </div>
 
-<div>
-	<a asp-action="Index">Back to List</a>
-</div>
-<form method="post" enctype="multipart/form-data">
+
+
+
+
+
+
+
+@*Ajustar - culpa do Back*@
+@*<form method="post" enctype="multipart/form-data">
 	<div class="row">
 		<div class="col-md-4 col-lg-4">
-			@*<button class="btn btn-default" type="button" value="Selecione a Imagem" onclick="@Url.Action("GetImage", "Home")"></button>*@
+			<button class="btn btn-default" type="button" value="Selecione a Imagem" onclick="@Url.Action("GetImage", "Home")"></button>
 			@Html.TextBox("File", Model.File, new { @class = "form-control", type = "file", accept = "Image/jpg,Image/jpeg"})
 		</div>
 		<div class="col-md-4 col-lg-4">
@@ -118,20 +95,19 @@
 </form>
 
 <form method="post" enctype="multipart/form-data">
-    <label>Escolha a sua imagem para upload</label>
-    <br />
+	<label>Escolha a sua imagem para upload</label>
 	<br />
-    <input type="file" name="Image" />
-    <br />
 	<br />
-    <button type="submit" class="btn btn-danger">Enviar Imagem</button>
+	<input type="file" name="Image" />
+	<br />
+	<br />
+	<button type="submit" class="btn btn-danger">Enviar Imagem</button>
 </form>
 
 @if (imageName != null)
 {
 	<img src="/images/@imageName" />
 }
->>>>>>> 1372778f97afc446670dca1f30143604c2b8a1c1
 
 @section Scripts {
 	@{
@@ -143,4 +119,4 @@
 			console.log("entrei no change");
 		})
 	</script>
-}
+}*@

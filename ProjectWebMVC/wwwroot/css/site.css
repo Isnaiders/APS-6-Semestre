@@ -35,7 +35,7 @@ footer {
     margin-bottom: 25px;
 }
 
-input[type = 'file']{
+input[type = 'file'] {
     display: none;
 }
 
@@ -59,10 +59,10 @@ input[type = 'file']{
     transition-timing-function: ease-in-out;
 }
 
-.clean:hover {
-    background-color: black;
-    color: white;
-}
+    .clean:hover {
+        background-color: black;
+        color: white;
+    }
 
 .image-container {
     background-color: transparent;
@@ -71,7 +71,7 @@ input[type = 'file']{
     border-radius: 5px;
 }
 
-#image{
+#image {
     width: 100%;
 }
 
@@ -92,6 +92,7 @@ input[type = 'file']{
     cursor: pointer;
     width: 100%;
 }
+
 .btn-apli-filter:hover {
     background: #232323;
 }
