@@ -11,7 +11,8 @@
 @*@Html.ValidationSummary(false, "", new { @class = "text-danger" })*@
 
 <form method="post" enctype="multipart/form-data">
-    @Html.Hidden("Image", Model.OriginImage)
+    @Html.Hidden("OriginImage", Model.OriginImage)
+    @Html.Hidden("FilteredImageName", Model.FilteredImageName)
     <div class="row">
         <div class="col-md-12">
             <div class="ibox">
@@ -72,4 +73,4 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    }
+}
