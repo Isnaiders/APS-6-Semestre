@@ -3,7 +3,6 @@ using ProjectWebMVC.Models;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace ProjectWebMVC.Controllers
 {
@@ -45,34 +44,57 @@ namespace ProjectWebMVC.Controllers
         [HttpPost]
         public IActionResult Filters(FiltersViewModel model)
         {
-            if (model.OriginImage == null)
+            if (model.Type == Models.Enum.FilterType.Unknown)
             {
-                ModelState.AddModelError("File", "Nenhuma imagem foi selecionada");
+                ModelState.AddModelError("Type", "Nenhum filtro foi selecionado");
+                ViewBag.Warning = true;
+                return View(model);
+            }
+            if (model.OriginImage == null && model.OriginImageName == null)
+            {
+                ModelState.AddModelError("OriginImage", "Nenhuma imagem foi selecionada");
+                ViewBag.Warning = true;
                 return View(model);
             }
 
             string savePath = serverPath + "\\images\\";
+            string fileName = string.IsNullOrEmpty(model.OriginImageName) ? model.OriginImage?.FileName : model.OriginImageName; ;
+            ViewBag.Success = false;
+            ViewBag.Warning = false;
+
+            if (model.OriginImage == null && !string.IsNullOrEmpty(fileName))
+            {
+                using (var stream = System.IO.File.OpenRead(savePath + fileName))
+                {
+                    model.OriginImageBit = new Bitmap(stream.Name, true);
+                }
+            }
 
             if (!Directory.Exists(savePath))
                 Directory.CreateDirectory(savePath);
 
-            using (var stream = System.IO.File.Create(savePath + model.OriginImage.FileName))
+            if (model.OriginImageBit == null)
             {
-                try
+                using (var stream = System.IO.File.Create(savePath + fileName))
                 {
-                    model.OriginImage.CopyToAsync(stream);
-                    model.OriginImageBit = new Bitmap(stream);
-                }
-                catch (Exception)
-                {
-                    return View(model);
+                    try
+                    {
+                        model.OriginImageName = fileName;
+                        model.OriginImage.CopyToAsync(stream);
+                        model.OriginImageBit = new Bitmap(stream);
+                    }
+                    catch (Exception)
+                    {
+                        ViewBag.Warning = true;
+                        return View(model);
+                    }
                 }
             }
 
             switch (model.Type)
             {
                 case Models.Enum.FilterType.Unknown:
-                    break;
+                    return View(model);
                 case Models.Enum.FilterType.Shine:
                     //model.FilteredImageBit = Brilho(model.OriginImageBit);
                     break;
@@ -141,7 +163,8 @@ namespace ProjectWebMVC.Controllers
             }
 
             //--< Output as .Jpg >--
-            var filteredImageName = "Filtered_" + model.OriginImage.FileName;
+            //string savePath = serverPath + "\\images\\";
+            var filteredImageName = Guid.NewGuid() + "_Filtered_" + fileName;
             var outputPath = savePath + filteredImageName;
             using (var output = System.IO.File.Open(outputPath, FileMode.Create))
             {
@@ -163,33 +186,10 @@ namespace ProjectWebMVC.Controllers
             //--< Output as .Jpg >--
 
             model.FilteredImageName = filteredImageName;
+            ViewBag.Success = true;
 
             return View(model);
         }
-
-        //[HttpPost]
-        //public IActionResult GetImage(FiltersViewModel model)
-        //{
-        //    string savePath = serverPath + "\\images\\";
-
-        //    if (!Directory.Exists(savePath))
-        //        Directory.CreateDirectory(savePath);
-
-        //    using (var stream = System.IO.File.Create(savePath + model.OriginImage.FileName))
-        //    {
-        //        model.OriginImage.CopyToAsync(stream);
-        //        model.OriginImage.CopyToAsync(stream);
-        //    }
-
-        //    //--< Upload Form >--
-        //    string srcImage_Path = "wwwroot/images/me.jpg";
-        //    string resizeImage_Path = "wwwroot/images/mizinho.jpg";
-        //    int new_Size = 500;
-        //    Image_resize(srcImage_Path, resizeImage_Path, new_Size);
-        //    //--</ Upload Form >--
-
-        //    return RedirectToAction("Filters", model);
-        //}
 
         //private Bitmap Shine(Bitmap image)
         //{

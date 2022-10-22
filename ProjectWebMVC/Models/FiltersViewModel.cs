@@ -10,6 +10,7 @@ namespace ProjectWebMVC.Models
         }
 
         public IFormFile OriginImage { get; set; }
+        public string OriginImageName { get; set; }
         public string FilteredImageName { get; set; }
         public Bitmap OriginImageBit { get; set; }
         public Bitmap FilteredImageBit { get; set; }
