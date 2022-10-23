@@ -2,7 +2,7 @@
 
 namespace ProjectWebMVC.Models.Enum
 {
-    public enum FilterType
+    public enum FilterType : int
     {
         [Display(Name = "Não Selecionado")]
         Unknown,
@@ -39,7 +39,7 @@ namespace ProjectWebMVC.Models.Enum
         [Display(Name = "Rotação Anti-horária")]
         AntiClockwiseRotation,
         [Display(Name = "Rotação no Sentido Horário")]
-        ClockwiseRotationion,
+        ClockwiseRotation,
         [Display(Name = "Sobel Hx")]
         SobelHx,
         [Display(Name = "Sobel Hy")]

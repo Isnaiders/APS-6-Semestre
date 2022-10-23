@@ -1,10 +1,6 @@
 ﻿@using ProjectWebMVC.Models.Enum
 @model FiltersViewModel
 
-<h1>@ViewData["Title"]</h1>
-
-<h4>Program</h4>
-
 @*@Html.ValidationSummary(false, "", new { @class = "text-danger" })*@
 
 <form method="post" enctype="multipart/form-data">
@@ -28,14 +24,14 @@
 						   type="file"
 						   id="OriginImage"
 						   name="OriginImage"
-						   accept="image/jpg, image/jpeg, image/png"/>
+						   accept="image/jpg, image/jpeg, image/png" />
 					@*@Html.ValidationMessageFor(m => m.OriginImage, "Selecione uma imagem!!!", new { Class = "text-danger" })*@
 				</div>
 			</div>
 			<div class="col-md-4">
 				<div class="form-group">
 					<label class="control-label"> Selecione o Filtro:</label>
-					<select asp-for="Type" class="drop-select" asp-items="Html.GetEnumSelectList<FilterType>()"></select>
+					<select asp-for="Type" id="SelectType" class="drop-select" asp-items="Html.GetEnumSelectList<FilterType>()"></select>
 					@Html.HiddenFor(m => m.Type, Model.Type)
 					@*@Html.ValidationMessageFor(m => m.Type, "Safadinho querendo burlar, né", new { Class = "text-danger" })*@
 				</div>
@@ -68,6 +64,11 @@
 			</div>
 		</div>
 	</div>
+
+	@Html.HiddenFor(m => m.FiltersConfig.Red, Model.FiltersConfig.Red)
+	@Html.HiddenFor(m => m.FiltersConfig.Green, Model.FiltersConfig.Green)
+	@Html.HiddenFor(m => m.FiltersConfig.Blue, Model.FiltersConfig.Blue)
+	<div class="DivModal"></div>
 </form>
 
 @section Scripts {
@@ -76,6 +77,78 @@
 	}
 
 	<script>
+		//$(document).ready(function () {
+		//	$(document).on('change', '#SelectType', function () {
+		//		var type = $(this).val();
+		//		console.log('type document: ' + type);
+		//		showIframeModal('DivModal', '@Url.Action("FiltersConfig")?type=' + type, 'Configuração do ' + type, false, 380);
+		//	});
+		//});
+
+		$('#SelectType').change(function () {
+			var type = $(this).val();
+			var typeString = $(this).find(":selected").text();
+			console.log('typeString: ' + typeString);
+			if (type == 1 || type == 2 || type == 8 || type == 16 || type == 17 || type == 20 || type == 21)
+				showIframeModal('DivModal', '@Url.Action("FiltersConfig")?type=' + type + '&originImageName=' + '@Model.OriginImageName' + '&filteredImageName=' + '@Model.FilteredImageName', 'Configuração do ' + typeString, false, 600);
+		});
+
+		function getFilterConfig() {
+
+		}
+
+		function showIframeModal(placementId, url, title, showButtonOk, height, extendClass, windowSize,
+			extendCss, iframeId = "", footerButtonText = "Ok", footerButtonDataDismiss = true, footerButtonId = "footerModalButton") {
+
+			if ($('#' + placementId).length == 0) {
+				$('body').append(`<div id="${placementId}"></div>`);
+			}
+
+			if (windowSize == undefined || windowSize == null || windowSize == "") {
+				windowSize = "lg"
+			}
+			lastModalOpenedId = placementId;
+			var iframe = "<iframe id='" + iframeId + "' src='" + url + "' frameborder='0' width='100%' height='100%' style='background: white url(/Content/images/icons/loading.gif) no-repeat center center;background-size: 50px;'><p>Desculpe, o seu navegador não suporta este recurso!</p></iframe>";
+
+			var heightTag = height > 0 ? "style='height:" + height + "px'" : " ";
+
+			var html = "<div id='" + placementId + "_modal' class='modal fade' role='dialog'>" +
+				"<div class='modal-dialog modal-" + windowSize + " " + (extendClass ? extendClass : "") + "'" + (extendCss ? " style='" + extendCss + "'" : "") + ">" +
+				"<div class='modal-content'>" +
+				"<div class='modal-header'>" +
+				"<button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>" +
+				"<strong><h3 class='modal-title' id='" + placementId + "_title'>" + title + "</h3></strong>" +
+				"</div>" +
+				"<div class='modal-body' style='padding:15px'>" +
+				"<div class='row'>" +
+				"<div class='col-lg-12' " + heightTag + ">";
+			html += iframe;
+			html += "</div'>" +
+				"</div>" +
+				"</div>";
+			if (showButtonOk) {
+				var jsCodeBtn = "<button class='btn btn-primary' "
+					+ (footerButtonDataDismiss ? "data-dismiss='modal'" : "")
+					+ " id = " + footerButtonId
+					+ " >" + footerButtonText + "</button>";
+
+				html += "<div class='modal-footer'>" +
+					jsCodeBtn +
+					"</div>";
+			}
+
+			html += "</div>" +
+				"</div>" +
+				"</div>";
+
+			document.getElementById(placementId).innerHTML = html;
+			$('#' + placementId + '_modal').modal('show');
+		}
+
+		function closeModal() {
+			$(".modal .close").click();
+		}
+
 		//Preview the image before it is filtered
 		function readURL(input) {
 			if (input.files && input.files[0]) {

@@ -7,6 +7,7 @@ namespace ProjectWebMVC.Models
     {
         public FiltersViewModel()
         {
+            FiltersConfig = new FiltersConfigViewModel();
         }
 
         public IFormFile OriginImage { get; set; }
@@ -15,5 +16,6 @@ namespace ProjectWebMVC.Models
         public Bitmap OriginImageBit { get; set; }
         public Bitmap FilteredImageBit { get; set; }
         public FilterType Type { get; set; }
+        public FiltersConfigViewModel FiltersConfig { get; set; }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProjectWebMVC.Models;
+using ProjectWebMVC.Models.Enum;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Reflection;
 
 namespace ProjectWebMVC.Controllers
 {
@@ -143,7 +145,7 @@ namespace ProjectWebMVC.Controllers
                 case Models.Enum.FilterType.AntiClockwiseRotation:
                     //model.FilteredImageBit = RotaçãoAnti(model.OriginImageBit);
                     break;
-                case Models.Enum.FilterType.ClockwiseRotationion:
+                case Models.Enum.FilterType.ClockwiseRotation:
                     //model.FilteredImageBit = Rotação(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.SobelHx:
@@ -188,6 +190,15 @@ namespace ProjectWebMVC.Controllers
             model.FilteredImageName = filteredImageName;
             ViewBag.Success = true;
 
+            return View(model);
+        }
+
+        public IActionResult FiltersConfig(string type, string originImageName, string filteredImageName)
+        {
+            var model = new FiltersViewModel();
+            model.Type = (FilterType)Enum.Parse(typeof(FilterType), type);
+            model.OriginImageName = !string.IsNullOrEmpty(originImageName) ? originImageName : "no-image.jpg";
+            model.FilteredImageName = !string.IsNullOrEmpty(filteredImageName) ? filteredImageName : "no-image.jpg";
             return View(model);
         }
 

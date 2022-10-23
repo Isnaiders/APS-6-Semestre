@@ -1,0 +1,83 @@
+﻿@using ProjectWebMVC.Models.Enum
+@model FiltersViewModel
+
+@{
+	Layout = "";
+}
+
+@if (Model.Type == FilterType.Shine || Model.Type == FilterType.Contrast)
+{
+	<div class="row">
+		<div class="col-md-12">
+			<label>Insira a tonalidade de vermelho:</label>
+			@Html.TextBoxFor(m => m.FiltersConfig.Red, new { Placeholder = "Tonalidade de vermelho" })
+			@Html.HiddenFor(m => m.FiltersConfig.Red, Model.FiltersConfig.Red)
+			@Html.ValidationMessageFor(m => m.FiltersConfig.Red, "", new { Class = "text-danger" })
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<label>Insira a tonalidade de verde:</label>
+			@Html.TextBoxFor(m => m.FiltersConfig.Green, new { Placeholder = "Tonalidade de verde" })
+			@Html.HiddenFor(m => m.FiltersConfig.Green, Model.FiltersConfig.Green)
+			@Html.ValidationMessageFor(m => m.FiltersConfig.Green, "", new { Class = "text-danger" })
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<label>Insira a tonalidade de azul:</label>
+			@Html.TextBoxFor(m => m.FiltersConfig.Blue, new { Placeholder = "Tonalidade de azul" })
+			@Html.HiddenFor(m => m.FiltersConfig.Blue, Model.FiltersConfig.Blue)
+			@Html.ValidationMessageFor(m => m.FiltersConfig.Blue, "", new { Class = "text-danger" })
+		</div>
+	</div>
+}
+
+@if (Model.Type == FilterType.Histogram)
+{
+
+}
+
+@if (Model.Type == FilterType.AntiClockwiseRotation || Model.Type == FilterType.ClockwiseRotation)
+{
+	<div class="ibox">
+		<div class="row">
+			<div class="col-md-12">
+				<label>Informe os graus de rotação:</label>
+				@Html.TextBoxFor(m => m.FiltersConfig.Rotation, new { Placeholder = "Graus de rotação" })
+				@Html.HiddenFor(m => m.FiltersConfig.Rotation, Model.FiltersConfig.Rotation)
+				@Html.ValidationMessageFor(m => m.FiltersConfig.Rotation, "", new { Class = "text-danger" })
+			</div>
+		</div>
+	</div>
+}
+
+@if (Model.Type == FilterType.ZoomIn)
+{
+
+}
+
+@if (Model.Type == FilterType.ZoomOut)
+{
+
+}
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="wrapper">
+			<button class="btn-slide" onclick="setFiltersConfig()"><span>Aplicar</span></button>
+		</div>
+	</div>
+</div>
+
+<Script>
+	function setFiltersConfig() {
+		var red = $('#FiltersConfig_Red').val();
+		var green = $('#FiltersConfig_Green').val();
+		var blue = $('#FiltersConfig_Blue').val();
+		console.log('red: ' + red);
+		console.log('green: ' + green);
+		console.log('blue: ' + blue);
+
+	}
+</Script>
