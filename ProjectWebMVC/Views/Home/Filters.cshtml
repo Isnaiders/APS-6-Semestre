@@ -88,13 +88,14 @@
 		$('#SelectType').change(function () {
 			var type = $(this).val();
 			var typeString = $(this).find(":selected").text();
-			console.log('typeString: ' + typeString);
 			if (type == 1 || type == 2 || type == 8 || type == 16 || type == 17 || type == 20 || type == 21)
 				showIframeModal('DivModal', '@Url.Action("FiltersConfig")?type=' + type + '&originImageName=' + '@Model.OriginImageName' + '&filteredImageName=' + '@Model.FilteredImageName', 'Configuração do ' + typeString, false, 600);
 		});
 
-		function getFilterConfig() {
-
+		function setFiltersConfig(red, green, blue) {
+			$('#FiltersConfig_Red').val(red);
+			$('#FiltersConfig_Green').val(green);
+			$('#FiltersConfig_Blue').val(blue);
 		}
 
 		function showIframeModal(placementId, url, title, showButtonOk, height, extendClass, windowSize,
@@ -146,7 +147,8 @@
 		}
 
 		function closeModal() {
-			$(".modal .close").click();
+			$('.modal').modal('toggle');
+			//$(".modal .close").click();
 		}
 
 		//Preview the image before it is filtered
