@@ -60,7 +60,7 @@ namespace ProjectWebMVC.Controllers
             }
 
             string savePath = serverPath + "\\images\\";
-            string fileName = string.IsNullOrEmpty(model.OriginImageName) ? model.OriginImage?.FileName : model.OriginImageName; ;
+            string fileName = string.IsNullOrEmpty(model.OriginImageName) ? model.OriginImage?.FileName : model.OriginImageName;
             ViewBag.Success = false;
             ViewBag.Warning = false;
 
@@ -98,10 +98,8 @@ namespace ProjectWebMVC.Controllers
                 case Models.Enum.FilterType.Unknown:
                     return View(model);
                 case Models.Enum.FilterType.Shine:
-                    //model.FilteredImageBit = Brilho(model.OriginImageBit);
-                    break;
                 case Models.Enum.FilterType.Contrast:
-                    //model.FilteredImageBit = Contraste(model.OriginImageBit);
+                    model.FilteredImageBit = ShineAndConstrat(model.OriginImageBit, model.FiltersConfig);
                     break;
                 case Models.Enum.FilterType.GrayConvertion:
                     model.FilteredImageBit = GrayConvertion(model.OriginImageBit);
@@ -202,88 +200,82 @@ namespace ProjectWebMVC.Controllers
             return View(model);
         }
 
-        //private Bitmap Shine(Bitmap image)
-        //{
-        //    try
-        //    {
-        //        int briR = Convert.ToInt32(toolStripMenuItem8.Text);
-        //        int briG = Convert.ToInt32(toolStripMenuItem9.Text);
-        //        int briB = Convert.ToInt32(toolStripMenuItem10.Text);
+        private Bitmap ShineAndConstrat(Bitmap image, FiltersConfigViewModel firtersConfig)
+        {
+            try
+            {
+                int briR = Convert.ToInt32(firtersConfig.Red);
+                int briG = Convert.ToInt32(firtersConfig.Green);
+                int briB = Convert.ToInt32(firtersConfig.Blue);
 
-        //        if (briR > 255)
-        //        {
-        //            briR = 255;
-        //            toolStripMenuItem8.Text = "255";
-        //        }
-        //        else if (briR < -255)
-        //        {
-        //            briR = -255;
-        //            toolStripMenuItem8.Text = "-255";
-        //        }
+                if (briR > 255)
+                {
+                    briR = 255;
+                }
+                else if (briR < -255)
+                {
+                    briR = -255;
+                }
 
-        //        if (briG > 255)
-        //        {
-        //            briG = 255;
-        //            toolStripMenuItem9.Text = "255";
-        //        }
-        //        else if (briG < -255)
-        //        {
-        //            briG = -255;
-        //            toolStripMenuItem9.Text = "-255";
-        //        }
+                if (briG > 255)
+                {
+                    briG = 255;
+                }
+                else if (briG < -255)
+                {
+                    briG = -255;
+                }
 
-        //        if (briB > 255)
-        //        {
-        //            briB = 255;
-        //            toolStripMenuItem10.Text = "255";
-        //        }
-        //        else if (briB < -255)
-        //        {
-        //            briB = -255;
-        //            toolStripMenuItem10.Text = "-255";
-        //        }
+                if (briB > 255)
+                {
+                    briB = 255;
+                }
+                else if (briB < -255)
+                {
+                    briB = -255;
+                }
 
 
-        //        int h = image.Width;
-        //        int v = image.Height;
-        //        int faixaR = 0;
-        //        int faixaG = 0;
-        //        int faixaB = 0;
-        //        nova_imagem = new Bitmap(image.Width, image.Height);
-        //        int i, u;
-        //        for (i = 0; i < v; i++)
-        //        {
-        //            for (u = 0; u < h; u++)
-        //            {
-        //                faixaR = image.GetPixel(u, i).R + briR;
-        //                if (faixaR > 255)
-        //                    faixaR = 255;
-        //                else if (faixaR < 0)
-        //                    faixaR = 0;
+                int h = image.Width;
+                int v = image.Height;
+                int faixaR = 0;
+                int faixaG = 0;
+                int faixaB = 0;
+                nova_imagem = new Bitmap(image.Width, image.Height);
+                int i, u;
+                for (i = 0; i < v; i++)
+                {
+                    for (u = 0; u < h; u++)
+                    {
+                        faixaR = image.GetPixel(u, i).R + briR;
+                        if (faixaR > 255)
+                            faixaR = 255;
+                        else if (faixaR < 0)
+                            faixaR = 0;
 
-        //                faixaG = image.GetPixel(u, i).G + briG;
-        //                if (faixaG > 255)
-        //                    faixaG = 255;
-        //                else if (faixaG < 0)
-        //                    faixaG = 0;
+                        faixaG = image.GetPixel(u, i).G + briG;
+                        if (faixaG > 255)
+                            faixaG = 255;
+                        else if (faixaG < 0)
+                            faixaG = 0;
 
-        //                faixaB = image.GetPixel(u, i).B + briB;
-        //                if (faixaB > 255)
-        //                    faixaB = 255;
-        //                else if (faixaB < 0)
-        //                    faixaB = 0;
+                        faixaB = image.GetPixel(u, i).B + briB;
+                        if (faixaB > 255)
+                            faixaB = 255;
+                        else if (faixaB < 0)
+                            faixaB = 0;
 
-        //                int trasn = image.GetPixel(u, i).A;
+                        int trasn = image.GetPixel(u, i).A;
 
-        //                nova_imagem.SetPixel(u, i, Color.FromArgb(trasn, faixaR, faixaG, faixaB));
+                        nova_imagem.SetPixel(u, i, Color.FromArgb(trasn, faixaR, faixaG, faixaB));
 
-        //            }
-        //        }
+                    }
+                }
+            }
+            catch { }
 
-        //        return nova_imagem;
-        //    }
-        //    catch { }
-        //}
+            return nova_imagem;
+        }
 
         private Bitmap GrayConvertion(Bitmap image)
         {
