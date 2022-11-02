@@ -20,16 +20,12 @@ namespace ProjectWebMVC.Models.Enum
         MirroringVertical,
         [Display(Name = "Gaussiano")]
         Gaussiano,
-        [Display(Name = "Histograma")]
-        Histogram,
         [Display(Name = "Laplaciano")]
         Laplaciano,
         [Display(Name = "Negativo")]
         Negative,
         [Display(Name = "Passa Alta")]
         HighPass,
-        [Display(Name = "Passa Baixa")]
-        LowPass,
         [Display(Name = "Prewitt Hx")]
         PrewittHx,
         [Display(Name = "Prewitt Hy Hx")]

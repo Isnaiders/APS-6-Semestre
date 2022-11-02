@@ -7,35 +7,52 @@
 
 @if (Model.Type == FilterType.Shine || Model.Type == FilterType.Contrast)
 {
-	<div class="row">
-		<div class="col-md-12">
-			<label>Insira a tonalidade de vermelho:</label>
-			@Html.TextBoxFor(m => m.FiltersConfig.Red, new { Placeholder = "Tonalidade de vermelho" })
-			@Html.HiddenFor(m => m.FiltersConfig.Red, Model.FiltersConfig.Red)
-			@Html.ValidationMessageFor(m => m.FiltersConfig.Red, "", new { Class = "text-danger" })
+	<div class="ibox">
+		<div class="row">
+			<div class="col-md-12">
+				<label>Insira a tonalidade de vermelho:</label>
+				@Html.TextBoxFor(m => m.FiltersConfig.Red, new { Placeholder = "Tonalidade de vermelho" })
+				@Html.HiddenFor(m => m.FiltersConfig.Red, Model.FiltersConfig.Red)
+				@Html.ValidationMessageFor(m => m.FiltersConfig.Red, "", new { Class = "text-danger" })
+			</div>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col-md-12">
-			<label>Insira a tonalidade de verde:</label>
-			@Html.TextBoxFor(m => m.FiltersConfig.Green, new { Placeholder = "Tonalidade de verde" })
-			@Html.HiddenFor(m => m.FiltersConfig.Green, Model.FiltersConfig.Green)
-			@Html.ValidationMessageFor(m => m.FiltersConfig.Green, "", new { Class = "text-danger" })
+
+	<div class="ibox">
+		<div class="row">
+			<div class="col-md-12">
+				<label>Insira a tonalidade de verde:</label>
+				@Html.TextBoxFor(m => m.FiltersConfig.Green, new { Placeholder = "Tonalidade de verde" })
+				@Html.HiddenFor(m => m.FiltersConfig.Green, Model.FiltersConfig.Green)
+				@Html.ValidationMessageFor(m => m.FiltersConfig.Green, "", new { Class = "text-danger" })
+			</div>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col-md-12">
-			<label>Insira a tonalidade de azul:</label>
-			@Html.TextBoxFor(m => m.FiltersConfig.Blue, new { Placeholder = "Tonalidade de azul" })
-			@Html.HiddenFor(m => m.FiltersConfig.Blue, Model.FiltersConfig.Blue)
-			@Html.ValidationMessageFor(m => m.FiltersConfig.Blue, "", new { Class = "text-danger" })
+
+	<div class="ibox">
+		<div class="row">
+			<div class="col-md-12">
+				<label>Insira a tonalidade de azul:</label>
+				@Html.TextBoxFor(m => m.FiltersConfig.Blue, new { Placeholder = "Tonalidade de azul" })
+				@Html.HiddenFor(m => m.FiltersConfig.Blue, Model.FiltersConfig.Blue)
+				@Html.ValidationMessageFor(m => m.FiltersConfig.Blue, "", new { Class = "text-danger" })
+			</div>
 		</div>
 	</div>
 }
 
-@if (Model.Type == FilterType.Histogram)
+@if (Model.Type == FilterType.Quantization)
 {
-
+	<div class="ibox">
+		<div class="row">
+			<div class="col-md-12">
+				<label>Insira o valor da quantização:</label>
+				@Html.TextBoxFor(m => m.FiltersConfig.Quantization, new { Placeholder = "Valor da quantização" })
+				@Html.HiddenFor(m => m.FiltersConfig.Quantization, Model.FiltersConfig.Quantization)
+				@Html.ValidationMessageFor(m => m.FiltersConfig.Quantization, "", new { Class = "text-danger" })
+			</div>
+		</div>
+	</div>
 }
 
 @if (Model.Type == FilterType.AntiClockwiseRotation || Model.Type == FilterType.ClockwiseRotation)
@@ -43,29 +60,45 @@
 	<div class="ibox">
 		<div class="row">
 			<div class="col-md-12">
-				<label>Informe os graus de rotação:</label>
-				@Html.TextBoxFor(m => m.FiltersConfig.Rotation, new { Placeholder = "Graus de rotação" })
-				@Html.HiddenFor(m => m.FiltersConfig.Rotation, Model.FiltersConfig.Rotation)
-				@Html.ValidationMessageFor(m => m.FiltersConfig.Rotation, "", new { Class = "text-danger" })
+				<div class="form-group">
+					<label>Informe os graus de rotação:</label>
+					<select asp-for="FiltersConfig.Rotation" class="drop-select" asp-items="Html.GetEnumSelectList<EnumRotation>()"></select>
+					@Html.HiddenFor(m => m.FiltersConfig.Rotation, Model.FiltersConfig.Rotation)
+				</div>
 			</div>
 		</div>
 	</div>
 }
 
-@if (Model.Type == FilterType.ZoomIn)
+@if (Model.Type == FilterType.ZoomIn || Model.Type == FilterType.ZoomOut)
 {
+	<div class="ibox">
+		<div class="row">
+			<div class="col-md-12">
+				<label>Informe a quantidade de zoom no eixo do X:</label>
+				@Html.TextBoxFor(m => m.FiltersConfig.ZoomX, new { Placeholder = "Valor do eixo X" })
+				@Html.HiddenFor(m => m.FiltersConfig.ZoomX, Model.FiltersConfig.ZoomX)
+				@Html.ValidationMessageFor(m => m.FiltersConfig.ZoomX, "", new { Class = "text-danger" })
+			</div>
+		</div>
+	</div>
 
-}
-
-@if (Model.Type == FilterType.ZoomOut)
-{
-
+	<div class="ibox">
+		<div class="row">
+			<div class="col-md-12">
+				<label>Informe a quantidade de zoom no eixo do Y:</label>
+				@Html.TextBoxFor(m => m.FiltersConfig.ZoomY, new { Placeholder = "Valor do eixo Y" })
+				@Html.HiddenFor(m => m.FiltersConfig.ZoomY, Model.FiltersConfig.ZoomY)
+				@Html.ValidationMessageFor(m => m.FiltersConfig.ZoomY, "", new { Class = "text-danger" })
+			</div>
+		</div>
+	</div>
 }
 
 <div class="row">
 	<div class="col-md-12">
 		<div class="wrapper">
-			<button onclick="getFiltersConfig()" class="btn-slide"><span>Aplicar</span></button>
+			<button onclick="getFiltersConfig()" class="btn-slide"><span>Selecionar</span></button>
 		</div>
 	</div>
 </div>
@@ -80,7 +113,11 @@
 			var red = $('#FiltersConfig_Red').val();
 			var green = $('#FiltersConfig_Green').val();
 			var blue = $('#FiltersConfig_Blue').val();
-			parent.setFiltersConfig(red, green, blue);
+			var quantization = $('#FiltersConfig_Quantization').val();
+			var rotation = $('#FiltersConfig_Rotation').val();
+			var zoomX = $('#FiltersConfig_ZoomX').val();
+			var zoomY = $('#FiltersConfig_ZoomY').val();
+			parent.setFiltersConfig(red, green, blue, quantization, rotation, zoomX, zoomY);
 			parent.closeModal();
 		};
 	</script>

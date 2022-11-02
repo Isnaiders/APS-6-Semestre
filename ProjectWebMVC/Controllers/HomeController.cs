@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ProjectWebMVC.Models;
-using ProjectWebMVC.Models.Enum;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Reflection;
+using Microsoft.AspNetCore.Mvc;
+using ProjectWebMVC.Models;
+using ProjectWebMVC.Models.Enum;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace ProjectWebMVC.Controllers
@@ -49,21 +48,17 @@ namespace ProjectWebMVC.Controllers
         {
             if (model.Type == Models.Enum.FilterType.Unknown)
             {
-                ModelState.AddModelError("Type", "Nenhum filtro foi selecionado");
-                ViewBag.Warning = true;
+                ViewBag.NoHasFilterType = true;
                 return View(model);
             }
             if (model.OriginImage == null && model.OriginImageName == null)
             {
-                ModelState.AddModelError("OriginImage", "Nenhuma imagem foi selecionada");
-                ViewBag.Warning = true;
+                ViewBag.NoHasOriginImage = true;
                 return View(model);
             }
 
             string savePath = serverPath + "\\images\\";
             string fileName = string.IsNullOrEmpty(model.OriginImageName) ? model.OriginImage?.FileName : model.OriginImageName;
-            ViewBag.Success = false;
-            ViewBag.Warning = false;
 
             if (model.OriginImage == null && !string.IsNullOrEmpty(fileName))
             {
@@ -88,7 +83,6 @@ namespace ProjectWebMVC.Controllers
                     }
                     catch (Exception)
                     {
-                        ViewBag.Warning = true;
                         return View(model);
                     }
                 }
@@ -99,8 +93,10 @@ namespace ProjectWebMVC.Controllers
                 case Models.Enum.FilterType.Unknown:
                     return View(model);
                 case Models.Enum.FilterType.Shine:
+                    model.FilteredImageBit = Shine(model.OriginImageBit, model.FiltersConfig);
+                    break;
                 case Models.Enum.FilterType.Contrast:
-                    model.FilteredImageBit = ShineAndConstrat(model.OriginImageBit, model.FiltersConfig);
+                    model.FilteredImageBit = Contrast(model.OriginImageBit, model.FiltersConfig);
                     break;
                 case Models.Enum.FilterType.GrayConvertion:
                     model.FilteredImageBit = GrayConvertion(model.OriginImageBit);
@@ -117,9 +113,6 @@ namespace ProjectWebMVC.Controllers
                 case Models.Enum.FilterType.Gaussiano:
                     model.FilteredImageBit = Gaussiano(model.OriginImageBit);
                     break;
-                case Models.Enum.FilterType.Histogram:
-                    //model.FilteredImageBit = Histograma(model.OriginImageBit);
-                    break;
                 case Models.Enum.FilterType.Laplaciano:
                     model.FilteredImageBit = Laplaciano(model.OriginImageBit);
                     break;
@@ -128,9 +121,6 @@ namespace ProjectWebMVC.Controllers
                     break;
                 case Models.Enum.FilterType.HighPass:
                     model.FilteredImageBit = HighPass(model.OriginImageBit);
-                    break;
-                case Models.Enum.FilterType.LowPass:
-                    model.FilteredImageBit = LowPass(model.OriginImageBit);
                     break;
                 case Models.Enum.FilterType.PrewittHx:
                     model.FilteredImageBit = PrewittHx(model.OriginImageBit);
@@ -158,6 +148,11 @@ namespace ProjectWebMVC.Controllers
                     break;
                 case Models.Enum.FilterType.ZoomOut:
                     model.FilteredImageBit = ZoomOut(model.OriginImageBit, model.FiltersConfig);
+                    if (model.FilteredImageBit == null)
+                    {
+                        model.FilteredImageName = "";
+                        return View(model);
+                    }
                     break;
                 default:
                     break;
@@ -187,7 +182,6 @@ namespace ProjectWebMVC.Controllers
             //--< Output as .Jpg >--
 
             model.FilteredImageName = filteredImageName;
-            ViewBag.Success = true;
 
             return View(model);
         }
@@ -200,8 +194,7 @@ namespace ProjectWebMVC.Controllers
             model.FilteredImageName = !string.IsNullOrEmpty(filteredImageName) ? filteredImageName : "no-image.jpg";
             return View(model);
         }
-
-        private Bitmap ShineAndConstrat(Bitmap image, FiltersConfigViewModel firtersConfig)
+        private Bitmap Shine(Bitmap image, FiltersConfigViewModel firtersConfig)
         {
             try
             {
@@ -212,30 +205,35 @@ namespace ProjectWebMVC.Controllers
                 if (briR > 255)
                 {
                     briR = 255;
+                    firtersConfig.Red = 255;
                 }
                 else if (briR < -255)
                 {
                     briR = -255;
+                    firtersConfig.Red = -255;
                 }
 
                 if (briG > 255)
                 {
                     briG = 255;
+                    firtersConfig.Green = 255;
                 }
                 else if (briG < -255)
                 {
                     briG = -255;
+                    firtersConfig.Green = -255;
                 }
 
                 if (briB > 255)
                 {
                     briB = 255;
+                    firtersConfig.Blue = 255;
                 }
                 else if (briB < -255)
                 {
                     briB = -255;
+                    firtersConfig.Blue = -255;
                 }
-
 
                 int h = image.Width;
                 int v = image.Height;
@@ -244,6 +242,7 @@ namespace ProjectWebMVC.Controllers
                 int faixaB = 0;
                 nova_imagem = new Bitmap(image.Width, image.Height);
                 int i, u;
+
                 for (i = 0; i < v; i++)
                 {
                     for (u = 0; u < h; u++)
@@ -278,68 +277,80 @@ namespace ProjectWebMVC.Controllers
             return nova_imagem;
         }
 
-        private Bitmap AntiClockwiseRotation(Bitmap image, FiltersConfigViewModel filtersConfig)
+        private Bitmap Contrast(Bitmap image, FiltersConfigViewModel firtersConfig)
         {
             try
             {
-                int i = 0;
-                int u = 0;
+                double conR = Convert.ToDouble(firtersConfig.Red);
+                double conG = Convert.ToDouble(firtersConfig.Green);
+                double conB = Convert.ToDouble(firtersConfig.Blue);
+                if (conR > 255)
+                {
+                    conR = 255;
+                    firtersConfig.Red = 255;
+                }
+                else if (conR < 0)
+                {
+                    conR = 0;
+                    firtersConfig.Red = 0;
+                }
+                if (conG > 255)
+                {
+                    conG = 255;
+                    firtersConfig.Green = 255;
+                }
+                else if (conG < 0)
+                {
+                    conG = 0;
+                    firtersConfig.Green = 0;
+                }
+                if (conB > 255)
+                {
+                    conB = 255;
+                    firtersConfig.Blue = 255;
+                }
+                else if (conB < 0)
+                {
+                    conB = 0;
+                    firtersConfig.Blue = 0;
+                }
 
                 int h = image.Width;
                 int v = image.Height;
-                nova_imagem = new Bitmap(v, h);
+                int faixaR = 0;
+                int faixaG = 0;
+                int faixaB = 0;
+                nova_imagem = new Bitmap(image.Width, image.Height);
+                int i, u;
 
-
-                while (i < v)
+                for (i = 0; i < v; i++)
                 {
-                    while (u < h)
+                    for (u = 0; u < h; u++)
                     {
+                        faixaR = Convert.ToInt32(image.GetPixel(u, i).R * conR);
+                        if (faixaR > 255)
+                            faixaR = 255;
+                        else if (faixaR < 0)
+                            faixaR = 0;
 
-                        nova_imagem.SetPixel(i, h - u - 1, image.GetPixel(u, i));
-                        u = u + 1;
+                        faixaG = Convert.ToInt32(image.GetPixel(u, i).G * conG);
+                        if (faixaG > 255)
+                            faixaG = 255;
+                        else if (faixaG < 0)
+                            faixaG = 0;
 
+                        faixaB = Convert.ToInt32(image.GetPixel(u, i).B * conB);
+                        if (faixaB > 255)
+                            faixaB = 255;
+                        else if (faixaB < 0)
+                            faixaB = 0;
+
+                        int trasn = image.GetPixel(u, i).A;
+
+                        nova_imagem.SetPixel(u, i, Color.FromArgb(trasn, faixaR, faixaG, faixaB));
                     }
-                    u = 0;
-                    i = i + 1;
                 }
-
-                //MessageBox.Show("Salve a imagem para continuar rotando ela");
-
             }
-
-            catch { }
-
-            return nova_imagem;
-        }
-
-        private Bitmap ClockwiseRotation(Bitmap image, FiltersConfigViewModel filtersConfig)
-        {
-            try
-            {
-                int i = 0;
-                int u = 0;
-
-                int h = image.Width;
-                int v = image.Height;
-                nova_imagem = new Bitmap(v, h);
-
-
-                while (u < h)
-                {
-                    while (i < v)
-                    {
-
-                        nova_imagem.SetPixel(v - i - 1, u, image.GetPixel(u, i));
-                        i = i + 1;
-
-                    }
-                    i = 0;
-                    u = u + 1;
-                }
-
-                //MessageBox.Show("Salve a imagem para continuar rotando ela");
-            }
-
             catch { }
 
             return nova_imagem;
@@ -442,12 +453,8 @@ namespace ProjectWebMVC.Controllers
                         nova_imagem1.SetPixel(x, y, Color.FromArgb(trasn, r, g, b));
                     }
                 }
-                //pictureBox2.Image = nova_imagem1;
 
-                //GrayConvertion(nova_imagem1);
-                //Form3 newForm3 = new Form3();
-                //newForm3.Vcin1 = Vcin2;
-                //newForm3.Show();
+                GrayConvertion(nova_imagem1);
             }
             catch { }
 
@@ -776,18 +783,6 @@ namespace ProjectWebMVC.Controllers
             return nova_imagem;
         }
 
-        private Bitmap LowPass(Bitmap image)
-        {
-            try
-            {
-
-            }
-            catch (Exception)
-            {
-            }
-            return nova_imagem;
-        }
-
         private Bitmap PrewittHx(Bitmap image)
         {
             try
@@ -975,7 +970,6 @@ namespace ProjectWebMVC.Controllers
         {
             try
             {
-                //int quan = quan = Convert.ToInt32(valor.Text); // Implementar uma caixa para o usuário digitar o valor da quantização
                 int quan = filtersConfig.Quantization;
 
                 if (quan > 256)
@@ -1023,6 +1017,71 @@ namespace ProjectWebMVC.Controllers
                 }
             }
             catch { }
+            return nova_imagem;
+        }
+
+        private Bitmap AntiClockwiseRotation(Bitmap image, FiltersConfigViewModel filtersConfig)
+        {
+            for (int iteração = 0; iteração < (int)filtersConfig.Rotation; iteração++)
+            {
+                try
+                {
+                    int i = 0;
+                    int u = 0;
+
+                    int h = image.Width;
+                    int v = image.Height;
+                    nova_imagem = new Bitmap(v, h);
+
+                    while (i < v)
+                    {
+                        while (u < h)
+                        {
+                            nova_imagem.SetPixel(i, h - u - 1, image.GetPixel(u, i));
+                            u = u + 1;
+                        }
+                        u = 0;
+                        i = i + 1;
+                    }
+
+                    image = nova_imagem;
+                }
+
+                catch { }
+            }
+
+            return nova_imagem;
+        }
+
+        private Bitmap ClockwiseRotation(Bitmap image, FiltersConfigViewModel filtersConfig)
+        {
+            for (int iteração = 0; iteração < (int)filtersConfig.Rotation; iteração++)
+            {
+                try
+                {
+                    int i = 0;
+                    int u = 0;
+
+                    int h = image.Width;
+                    int v = image.Height;
+                    nova_imagem = new Bitmap(v, h);
+
+                    while (u < h)
+                    {
+                        while (i < v)
+                        {
+                            nova_imagem.SetPixel(v - i - 1, u, image.GetPixel(u, i));
+                            i = i + 1;
+                        }
+                        i = 0;
+                        u = u + 1;
+                    }
+
+                    image = nova_imagem;
+                }
+                catch { }
+            }
+
             return nova_imagem;
         }
 
@@ -1218,7 +1277,6 @@ namespace ProjectWebMVC.Controllers
                 int v = image.Height;
                 nova_imagem = new Bitmap(2 * h, 2 * v);
 
-
                 while (i < v)
                 {
                     while (u < h)
@@ -1234,7 +1292,6 @@ namespace ProjectWebMVC.Controllers
                     i = i + 1;
                     i2 = i2 + 2;
                 }
-
 
                 u = 0;
                 i = 0;
@@ -1266,8 +1323,6 @@ namespace ProjectWebMVC.Controllers
                     u = 0;
                     i = i + 2;
                 }
-
-
 
                 u = 0;
                 i = 0;
@@ -1301,6 +1356,7 @@ namespace ProjectWebMVC.Controllers
                 }
             }
             catch { }
+
             return nova_imagem;
         }
 
@@ -1331,8 +1387,6 @@ namespace ProjectWebMVC.Controllers
                 {
                     if (verti <= v)
                     {
-
-
                         nova_imagem = new Bitmap(hori, verti);
 
                         int fator_x = h / hori;
@@ -1399,17 +1453,7 @@ namespace ProjectWebMVC.Controllers
                             acumulado_i = acumulado_i + fator_y;
                         }
                     }
-
-                    else
-                    {
-                        //MessageBox.Show("Tamanho vertical maior que imagem original");
-                    }
                 }
-                else
-                {
-                    //MessageBox.Show("Tamanho horizontal maior que imagem original");
-                }
-
             }
             catch { }
 

@@ -1,10 +1,7 @@
 ﻿@using ProjectWebMVC.Models.Enum
 @model FiltersViewModel
 
-@*@Html.ValidationSummary(false, "", new { @class = "text-danger" })*@
-
 <form method="post" enctype="multipart/form-data">
-	@*@Html.Partial("_ValidationSummary")*@
 	<div class="ibox">
 		<div class="row">
 			<div class="col-md-4">
@@ -25,7 +22,8 @@
 						   id="OriginImage"
 						   name="OriginImage"
 						   accept="image/jpg, image/jpeg, image/png" />
-					@*@Html.ValidationMessageFor(m => m.OriginImage, "Selecione uma imagem!!!", new { Class = "text-danger" })*@
+					@if (Convert.ToBoolean(ViewBag.NoHasOriginImage))
+						@Html.ValidationMessageFor(m => m.OriginImage, "Selecione uma imagem", new { Class = "text-danger" })
 				</div>
 			</div>
 			<div class="col-md-4">
@@ -33,7 +31,8 @@
 					<label class="control-label"> Selecione o Filtro:</label>
 					<select asp-for="Type" id="SelectType" class="drop-select" asp-items="Html.GetEnumSelectList<FilterType>()"></select>
 					@Html.HiddenFor(m => m.Type, Model.Type)
-					@*@Html.ValidationMessageFor(m => m.Type, "Safadinho querendo burlar, né", new { Class = "text-danger" })*@
+					@if (Convert.ToBoolean(ViewBag.NoHasFilterType))
+						@Html.ValidationMessageFor(m => m.Type, "É necessário escolher algum filtro", new { Class = "text-danger" })
 				</div>
 				<div class="col-md-12">
 					<div class="wrapper">
@@ -68,6 +67,10 @@
 	@Html.HiddenFor(m => m.FiltersConfig.Red, Model.FiltersConfig.Red)
 	@Html.HiddenFor(m => m.FiltersConfig.Green, Model.FiltersConfig.Green)
 	@Html.HiddenFor(m => m.FiltersConfig.Blue, Model.FiltersConfig.Blue)
+	@Html.HiddenFor(m => m.FiltersConfig.Quantization, Model.FiltersConfig.Quantization)
+	@Html.HiddenFor(m => m.FiltersConfig.Rotation, Model.FiltersConfig.Rotation)
+	@Html.HiddenFor(m => m.FiltersConfig.ZoomX, Model.FiltersConfig.ZoomX)
+	@Html.HiddenFor(m => m.FiltersConfig.ZoomY, Model.FiltersConfig.ZoomY)
 	<div class="DivModal"></div>
 </form>
 
@@ -77,26 +80,22 @@
 	}
 
 	<script>
-		//$(document).ready(function () {
-		//	$(document).on('change', '#SelectType', function () {
-		//		var type = $(this).val();
-		//		console.log('type document: ' + type);
-		//		showIframeModal('DivModal', '@Url.Action("FiltersConfig")?type=' + type, 'Configuração do ' + type, false, 380);
-		//	});
-		//});
-
 		$('#SelectType').change(function () {
 			var type = $(this).val();
 			var typeString = $(this).find(":selected").text();
-			if (type == 1 || type == 2 || type == 8 || type == 16 || type == 17 || type == 20 || type == 21)
+			if (type == 1 || type == 2 || type == 13 || type == 14 || type == 15 || type == 18 || type == 19)
 				showIframeModal('DivModal', '@Url.Action("FiltersConfig")?type=' + type + '&originImageName=' + '@Model.OriginImageName' + '&filteredImageName=' + '@Model.FilteredImageName', 'Configuração do ' + typeString, false, 600);
 		});
 
-		function setFiltersConfig(red, green, blue) {
+		function setFiltersConfig(red, green, blue, quantization, rotation, zoomX, zoomY) {
 			$('#FiltersConfig_Red').val(red);
 			$('#FiltersConfig_Green').val(green);
 			$('#FiltersConfig_Blue').val(blue);
-		}
+			$('#FiltersConfig_Quantization').val(quantization);
+			$('#FiltersConfig_Rotation').val(rotation);
+			$('#FiltersConfig_ZoomX').val(zoomX);
+			$('#FiltersConfig_ZoomY').val(zoomY);
+		};
 
 		function showIframeModal(placementId, url, title, showButtonOk, height, extendClass, windowSize,
 			extendCss, iframeId = "", footerButtonText = "Ok", footerButtonDataDismiss = true, footerButtonId = "footerModalButton") {
@@ -117,7 +116,7 @@
 				"<div class='modal-dialog modal-" + windowSize + " " + (extendClass ? extendClass : "") + "'" + (extendCss ? " style='" + extendCss + "'" : "") + ">" +
 				"<div class='modal-content'>" +
 				"<div class='modal-header'>" +
-				"<button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>" +
+				"<button type='button' class='close' data-dismiss='modal' onclick='parent.closeModal()' aria-label='Close'><span aria-hidden='true'>&times;</span></button>" +
 				"<strong><h3 class='modal-title' id='" + placementId + "_title'>" + title + "</h3></strong>" +
 				"</div>" +
 				"<div class='modal-body' style='padding:15px'>" +
@@ -148,8 +147,7 @@
 
 		function closeModal() {
 			$('.modal').modal('toggle');
-			//$(".modal .close").click();
-		}
+		};
 
 		//Preview the image before it is filtered
 		function readURL(input) {
@@ -161,7 +159,7 @@
 				}
 				reader.readAsDataURL(input.files[0]);
 			}
-		}
+		};
 
 		$("#OriginImage").change(function () {
 			readURL(this);
