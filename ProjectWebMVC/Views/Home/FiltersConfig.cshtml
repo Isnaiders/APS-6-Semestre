@@ -10,30 +10,26 @@
 	<div class="ibox">
 		<div class="row">
 			<div class="col-md-12">
-				<label>Insira a tonalidade de vermelho:</label>
-				@Html.TextBoxFor(m => m.FiltersConfig.Red, new { Placeholder = "Tonalidade de vermelho" })
+				<label>Vermelho:</label>
+				@Html.TextBoxFor(m => m.FiltersConfig.Red, new { Placeholder = "Tonalidade de vermelho", Class = "col-md-10" })
 				@Html.HiddenFor(m => m.FiltersConfig.Red, Model.FiltersConfig.Red)
 				@Html.ValidationMessageFor(m => m.FiltersConfig.Red, "", new { Class = "text-danger" })
 			</div>
 		</div>
-	</div>
-
-	<div class="ibox">
+				<br />
 		<div class="row">
 			<div class="col-md-12">
-				<label>Insira a tonalidade de verde:</label>
-				@Html.TextBoxFor(m => m.FiltersConfig.Green, new { Placeholder = "Tonalidade de verde" })
+				<label>Verde:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+				@Html.TextBoxFor(m => m.FiltersConfig.Green, new { Placeholder = "Tonalidade de verde", Class = "col-md-10"})
 				@Html.HiddenFor(m => m.FiltersConfig.Green, Model.FiltersConfig.Green)
 				@Html.ValidationMessageFor(m => m.FiltersConfig.Green, "", new { Class = "text-danger" })
 			</div>
 		</div>
-	</div>
-
-	<div class="ibox">
+				<br />
 		<div class="row">
 			<div class="col-md-12">
-				<label>Insira a tonalidade de azul:</label>
-				@Html.TextBoxFor(m => m.FiltersConfig.Blue, new { Placeholder = "Tonalidade de azul" })
+				<label>Azul:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+				@Html.TextBoxFor(m => m.FiltersConfig.Blue, new { Placeholder = "Tonalidade de azul", Class = "col-md-10" })
 				@Html.HiddenFor(m => m.FiltersConfig.Blue, Model.FiltersConfig.Blue)
 				@Html.ValidationMessageFor(m => m.FiltersConfig.Blue, "", new { Class = "text-danger" })
 			</div>
@@ -47,7 +43,7 @@
 		<div class="row">
 			<div class="col-md-12">
 				<label>Insira o valor da quantização:</label>
-				@Html.TextBoxFor(m => m.FiltersConfig.Quantization, new { Placeholder = "Valor da quantização" })
+				@Html.TextBoxFor(m => m.FiltersConfig.Quantization, new { Placeholder = "Valor da quantização", Class = "col-md-12" })
 				@Html.HiddenFor(m => m.FiltersConfig.Quantization, Model.FiltersConfig.Quantization)
 				@Html.ValidationMessageFor(m => m.FiltersConfig.Quantization, "", new { Class = "text-danger" })
 			</div>
@@ -76,18 +72,16 @@
 		<div class="row">
 			<div class="col-md-12">
 				<label>Informe a quantidade de zoom no eixo do X:</label>
-				@Html.TextBoxFor(m => m.FiltersConfig.ZoomX, new { Placeholder = "Valor do eixo X" })
+				@Html.TextBoxFor(m => m.FiltersConfig.ZoomX, new { Placeholder = "Valor do eixo X", Class = "col-md-12"})
 				@Html.HiddenFor(m => m.FiltersConfig.ZoomX, Model.FiltersConfig.ZoomX)
 				@Html.ValidationMessageFor(m => m.FiltersConfig.ZoomX, "", new { Class = "text-danger" })
 			</div>
 		</div>
-	</div>
-
-	<div class="ibox">
+				<br />
 		<div class="row">
 			<div class="col-md-12">
 				<label>Informe a quantidade de zoom no eixo do Y:</label>
-				@Html.TextBoxFor(m => m.FiltersConfig.ZoomY, new { Placeholder = "Valor do eixo Y" })
+				@Html.TextBoxFor(m => m.FiltersConfig.ZoomY, new { Placeholder = "Valor do eixo Y", Class = "col-md-12"})
 				@Html.HiddenFor(m => m.FiltersConfig.ZoomY, Model.FiltersConfig.ZoomY)
 				@Html.ValidationMessageFor(m => m.FiltersConfig.ZoomY, "", new { Class = "text-danger" })
 			</div>
@@ -96,11 +90,13 @@
 }
 
 <div class="row">
-	<div class="col-md-12">
-		<div class="wrapper">
+	<div class="col-md-4"></div>
+	<div class="col-md-4">
+		<div style="margin-bottom: 10px;>
 			<button onclick="getFiltersConfig()" class="btn-slide"><span>Selecionar</span></button>
 		</div>
 	</div>
+	<div class="col-md-4"></div>
 </div>
 
 @section Scripts {
