@@ -12,6 +12,8 @@ namespace ProjectWebMVC.Models.Enum
         Contrast,
         [Display(Name = "Conversão Cinza")]
         GrayConvertion,
+        [Display(Name = "Dobrar o tamanho")]
+        ZoomIn,
         [Display(Name = "Equalização")]
         Equalization,
         [Display(Name = "Espelhamento Horizontal")]
@@ -32,6 +34,8 @@ namespace ProjectWebMVC.Models.Enum
         PrewittHyHx,
         [Display(Name = "Quantização")]
         Quantization,
+        [Display(Name = "Reduzir")]
+        ZoomOut,
         [Display(Name = "Rotação Anti-horária")]
         AntiClockwiseRotation,
         [Display(Name = "Rotação no Sentido Horário")]
@@ -39,10 +43,6 @@ namespace ProjectWebMVC.Models.Enum
         [Display(Name = "Sobel Hx")]
         SobelHx,
         [Display(Name = "Sobel Hy")]
-        SobelHy,
-        [Display(Name = "ZoomIn")]
-        ZoomIn,
-        [Display(Name = "ZoomOut")]
-        ZoomOut
+        SobelHy
     }
 }

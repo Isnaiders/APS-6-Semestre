@@ -42,9 +42,13 @@
 			</div>
 			<div class="col-md-4">
 				<div class="image-container">
-					@if (@Model.FilteredImageName == null)
+					@if (Model.FilteredImageName == null)
 					{
 						<img src="/img/no-image.jpg" id="image" />
+					}
+					else if (Model.FilteredImageName == "zoom-error.jpg")
+					{
+						<img src="/img/@Model.FilteredImageName" id="image" />
 					}
 					else
 					{
@@ -83,7 +87,7 @@
 		$('#SelectType').change(function () {
 			var type = $(this).val();
 			var typeString = $(this).find(":selected").text();
-			if (type == 1 || type == 2 || type == 13 || type == 14 || type == 15 || type == 18 || type == 19)
+			if (type == 1 || type == 2 || type == 14 || type == 15 || type == 16 || type == 17)
 				showIframeModal('DivModal', '@Url.Action("FiltersConfig")?type=' + type + '&originImageName=' + '@Model.OriginImageName' + '&filteredImageName=' + '@Model.FilteredImageName', 'Configuração do ' + typeString, false, 600);
 		});
 

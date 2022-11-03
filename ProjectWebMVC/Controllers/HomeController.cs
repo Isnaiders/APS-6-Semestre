@@ -101,6 +101,9 @@ namespace ProjectWebMVC.Controllers
                 case Models.Enum.FilterType.GrayConvertion:
                     model.FilteredImageBit = GrayConvertion(model.OriginImageBit);
                     break;
+                case Models.Enum.FilterType.ZoomIn:
+                    model.FilteredImageBit = ZoomIn(model.OriginImageBit);
+                    break;
                 case Models.Enum.FilterType.Equalization:
                     model.FilteredImageBit = Equalization(model.OriginImageBit);
                     break;
@@ -131,6 +134,14 @@ namespace ProjectWebMVC.Controllers
                 case Models.Enum.FilterType.Quantization:
                     model.FilteredImageBit = Quantization(model.OriginImageBit, model.FiltersConfig);
                     break;
+                case Models.Enum.FilterType.ZoomOut:
+                    model.FilteredImageBit = ZoomOut(model.OriginImageBit, model.FiltersConfig);
+                    if (model.FilteredImageBit == null)
+                    {
+                        model.FilteredImageName = "zoom-error.jpg";
+                        return View(model);
+                    }
+                    break;
                 case Models.Enum.FilterType.AntiClockwiseRotation:
                     model.FilteredImageBit = AntiClockwiseRotation(model.OriginImageBit, model.FiltersConfig);
                     break;
@@ -142,17 +153,6 @@ namespace ProjectWebMVC.Controllers
                     break;
                 case Models.Enum.FilterType.SobelHy:
                     model.FilteredImageBit = SobelHy(model.OriginImageBit);
-                    break;
-                case Models.Enum.FilterType.ZoomIn:
-                    model.FilteredImageBit = ZoomIn(model.OriginImageBit, model.FiltersConfig);
-                    break;
-                case Models.Enum.FilterType.ZoomOut:
-                    model.FilteredImageBit = ZoomOut(model.OriginImageBit, model.FiltersConfig);
-                    if (model.FilteredImageBit == null)
-                    {
-                        model.FilteredImageName = "";
-                        return View(model);
-                    }
                     break;
                 default:
                     break;
@@ -374,6 +374,106 @@ namespace ProjectWebMVC.Controllers
             }
 
             return grayScale;
+        }
+
+        private Bitmap ZoomIn(Bitmap image)
+        {
+            try
+            {
+                int i = 0;
+                int u = 0;
+                int i2 = 0;
+                int u2 = 0;
+                int mediaR = 0;
+                int mediaG = 0;
+                int mediaB = 0;
+                int mediaA = 0;
+
+                int h = image.Width;
+                int v = image.Height;
+                nova_imagem = new Bitmap(2 * h, 2 * v);
+
+                while (i < v)
+                {
+                    while (u < h)
+                    {
+
+                        nova_imagem.SetPixel(u2, i2, image.GetPixel(u, i));
+
+                        u = u + 1;
+                        u2 = u2 + 2;
+                    }
+                    u = 0;
+                    u2 = 0;
+                    i = i + 1;
+                    i2 = i2 + 2;
+                }
+
+                u = 0;
+                i = 0;
+                while (i < 2 * v)
+                {
+                    while (u < 2 * h)
+                    {
+                        if (u % 2 == 1)
+                        {
+                            if (u + 1 >= 2 * h)
+                            {
+                                mediaR = (nova_imagem.GetPixel(u - 1, i).R);
+                                mediaG = (nova_imagem.GetPixel(u - 1, i).G);
+                                mediaB = (nova_imagem.GetPixel(u - 1, i).B);
+                                mediaA = (nova_imagem.GetPixel(u - 1, i).A);
+                            }
+                            else
+                            {
+                                mediaR = (nova_imagem.GetPixel(u - 1, i).R + nova_imagem.GetPixel(u + 1, i).R) / 2;
+                                mediaG = (nova_imagem.GetPixel(u - 1, i).G + nova_imagem.GetPixel(u + 1, i).G) / 2;
+                                mediaB = (nova_imagem.GetPixel(u - 1, i).B + nova_imagem.GetPixel(u + 1, i).B) / 2;
+                                mediaA = (nova_imagem.GetPixel(u - 1, i).A + nova_imagem.GetPixel(u + 1, i).A) / 2;
+                            }
+                            nova_imagem.SetPixel(u, i, Color.FromArgb(mediaA, mediaR, mediaG, mediaB));
+                        }
+
+                        u = u + 1;
+                    }
+                    u = 0;
+                    i = i + 2;
+                }
+
+                u = 0;
+                i = 0;
+                while (u < 2 * h)
+                {
+                    while (i < 2 * v)
+                    {
+                        if (i % 2 == 1)
+                        {
+                            if (i + 1 >= 2 * v)
+                            {
+                                mediaR = (nova_imagem.GetPixel(u, i - 1).R);
+                                mediaG = (nova_imagem.GetPixel(u, i - 1).G);
+                                mediaB = (nova_imagem.GetPixel(u, i - 1).B);
+                                mediaA = (nova_imagem.GetPixel(u, i - 1).A);
+                            }
+                            else
+                            {
+                                mediaR = (nova_imagem.GetPixel(u, i - 1).R + nova_imagem.GetPixel(u, i + 1).R) / 2;
+                                mediaG = (nova_imagem.GetPixel(u, i - 1).G + nova_imagem.GetPixel(u, i + 1).G) / 2;
+                                mediaB = (nova_imagem.GetPixel(u, i - 1).B + nova_imagem.GetPixel(u, i + 1).B) / 2;
+                                mediaA = (nova_imagem.GetPixel(u, i - 1).A + nova_imagem.GetPixel(u, i + 1).A) / 2;
+                            }
+                            nova_imagem.SetPixel(u, i, Color.FromArgb(mediaA, mediaR, mediaG, mediaB));
+                        }
+
+                        i = i + 1;
+                    }
+                    i = 0;
+                    u = u + 1;
+                }
+            }
+            catch { }
+
+            return nova_imagem;
         }
 
         private Bitmap Equalization(Bitmap image)
@@ -1012,11 +1112,102 @@ namespace ProjectWebMVC.Controllers
                             novo_valorB = 255;
 
                         nova_imagem.SetPixel(u, i, Color.FromArgb(trasn, novo_valorR, novo_valorG, novo_valorB));
-
                     }
                 }
             }
             catch { }
+            return nova_imagem;
+        }
+
+        private Bitmap ZoomOut(Bitmap image, FiltersConfigViewModel filtersConfig)
+        {
+            try
+            {
+                int h = image.Width;
+                int v = image.Height;
+                int i = 0;
+                int u = 0;
+
+                int acumulado_i = 0;
+                int acumulado_u = 0;
+
+                int i2 = 0;
+                int u2 = 0;
+                int a = 0;
+                float mediaR = 0;
+                float mediaG = 0;
+                float mediaB = 0;
+                float mediaA = 0;
+
+                int hori = filtersConfig.ZoomX;
+                int verti = filtersConfig.ZoomY;
+
+                if (hori <= h)
+                {
+                    if (verti <= v)
+                    {
+                        nova_imagem = new Bitmap(hori, verti);
+
+                        int fator_x = h / hori;
+                        int fator_y = v / verti;
+
+                        while (i < verti)
+                        {
+                            while (u < hori)
+                            {
+                                while (i2 < fator_y)
+                                {
+                                    if (acumulado_i + i2 <= v)
+                                    {
+                                        mediaR = mediaR + image.GetPixel(acumulado_u, acumulado_i + i2).R;
+                                        mediaG = mediaG + image.GetPixel(acumulado_u, acumulado_i + i2).G;
+                                        mediaB = mediaB + image.GetPixel(acumulado_u, acumulado_i + i2).B;
+                                        mediaA = mediaA + image.GetPixel(acumulado_u, acumulado_i + i2).A;
+                                        a++;
+
+                                    }
+                                    i2 = i2 + 1;
+                                }
+                                while (u2 < fator_x)
+                                {
+                                    if (acumulado_u + u2 <= h)
+                                    {
+                                        mediaR = mediaR + image.GetPixel(acumulado_u + u2, acumulado_i).R;
+                                        mediaG = mediaG + image.GetPixel(acumulado_u + u2, acumulado_i).G;
+                                        mediaB = mediaB + image.GetPixel(acumulado_u + u2, acumulado_i).B;
+                                        mediaA = mediaA + image.GetPixel(acumulado_u + u2, acumulado_i).A;
+                                        a++;
+                                    }
+                                    u2 = u2 + 1;
+                                }
+
+                                mediaA = mediaA / a;
+                                mediaR = mediaR / a;
+                                mediaG = mediaG / a;
+                                mediaB = mediaB / a;
+
+                                nova_imagem.SetPixel(u, i, Color.FromArgb(Convert.ToInt32(mediaA), Convert.ToInt32(mediaR), Convert.ToInt32(mediaG), Convert.ToInt32(mediaB)));
+                                mediaA = 0;
+                                mediaR = 0;
+                                mediaG = 0;
+                                mediaB = 0;
+                                i2 = 0;
+                                u2 = 0;
+                                a = 0;
+                                u = u + 1;
+                                acumulado_u = acumulado_u + fator_x;
+                            }
+                            u = 0;
+                            acumulado_u = 0;
+
+                            i = i + 1;
+                            acumulado_i = acumulado_i + fator_y;
+                        }
+                    }
+                }
+            }
+            catch { }
+
             return nova_imagem;
         }
 
@@ -1253,206 +1444,6 @@ namespace ProjectWebMVC.Controllers
                     }
                     u = 0;
                     i = i + 1;
-                }
-            }
-            catch { }
-
-            return nova_imagem;
-        }
-
-        private Bitmap ZoomIn(Bitmap image, FiltersConfigViewModel filtersConfig)
-        {
-            try
-            {
-                int i = 0;
-                int u = 0;
-                int i2 = 0;
-                int u2 = 0;
-                int mediaR = 0;
-                int mediaG = 0;
-                int mediaB = 0;
-                int mediaA = 0;
-
-                int h = image.Width;
-                int v = image.Height;
-                nova_imagem = new Bitmap(2 * h, 2 * v);
-
-                while (i < v)
-                {
-                    while (u < h)
-                    {
-
-                        nova_imagem.SetPixel(u2, i2, image.GetPixel(u, i));
-
-                        u = u + 1;
-                        u2 = u2 + 2;
-                    }
-                    u = 0;
-                    u2 = 0;
-                    i = i + 1;
-                    i2 = i2 + 2;
-                }
-
-                u = 0;
-                i = 0;
-                while (i < 2 * v)
-                {
-                    while (u < 2 * h)
-                    {
-                        if (u % 2 == 1)
-                        {
-                            if (u + 1 >= 2 * h)
-                            {
-                                mediaR = (nova_imagem.GetPixel(u - 1, i).R);
-                                mediaG = (nova_imagem.GetPixel(u - 1, i).G);
-                                mediaB = (nova_imagem.GetPixel(u - 1, i).B);
-                                mediaA = (nova_imagem.GetPixel(u - 1, i).A);
-                            }
-                            else
-                            {
-                                mediaR = (nova_imagem.GetPixel(u - 1, i).R + nova_imagem.GetPixel(u + 1, i).R) / 2;
-                                mediaG = (nova_imagem.GetPixel(u - 1, i).G + nova_imagem.GetPixel(u + 1, i).G) / 2;
-                                mediaB = (nova_imagem.GetPixel(u - 1, i).B + nova_imagem.GetPixel(u + 1, i).B) / 2;
-                                mediaA = (nova_imagem.GetPixel(u - 1, i).A + nova_imagem.GetPixel(u + 1, i).A) / 2;
-                            }
-                            nova_imagem.SetPixel(u, i, Color.FromArgb(mediaA, mediaR, mediaG, mediaB));
-                        }
-
-                        u = u + 1;
-                    }
-                    u = 0;
-                    i = i + 2;
-                }
-
-                u = 0;
-                i = 0;
-                while (u < 2 * h)
-                {
-                    while (i < 2 * v)
-                    {
-                        if (i % 2 == 1)
-                        {
-                            if (i + 1 >= 2 * v)
-                            {
-                                mediaR = (nova_imagem.GetPixel(u, i - 1).R);
-                                mediaG = (nova_imagem.GetPixel(u, i - 1).G);
-                                mediaB = (nova_imagem.GetPixel(u, i - 1).B);
-                                mediaA = (nova_imagem.GetPixel(u, i - 1).A);
-                            }
-                            else
-                            {
-                                mediaR = (nova_imagem.GetPixel(u, i - 1).R + nova_imagem.GetPixel(u, i + 1).R) / 2;
-                                mediaG = (nova_imagem.GetPixel(u, i - 1).G + nova_imagem.GetPixel(u, i + 1).G) / 2;
-                                mediaB = (nova_imagem.GetPixel(u, i - 1).B + nova_imagem.GetPixel(u, i + 1).B) / 2;
-                                mediaA = (nova_imagem.GetPixel(u, i - 1).A + nova_imagem.GetPixel(u, i + 1).A) / 2;
-                            }
-                            nova_imagem.SetPixel(u, i, Color.FromArgb(mediaA, mediaR, mediaG, mediaB));
-                        }
-
-                        i = i + 1;
-                    }
-                    i = 0;
-                    u = u + 1;
-                }
-            }
-            catch { }
-
-            return nova_imagem;
-        }
-
-        private Bitmap ZoomOut(Bitmap image, FiltersConfigViewModel filtersConfig)
-        {
-            try
-            {
-                int h = image.Width;
-                int v = image.Height;
-                int i = 0;
-                int u = 0;
-
-                int acumulado_i = 0;
-                int acumulado_u = 0;
-
-                int i2 = 0;
-                int u2 = 0;
-                int a = 0;
-                float mediaR = 0;
-                float mediaG = 0;
-                float mediaB = 0;
-                float mediaA = 0;
-
-                int hori = filtersConfig.ZoomX;
-                int verti = filtersConfig.ZoomY;
-
-                if (hori <= h)
-                {
-                    if (verti <= v)
-                    {
-                        nova_imagem = new Bitmap(hori, verti);
-
-                        int fator_x = h / hori;
-                        int fator_y = v / verti;
-
-                        while (i < verti)
-                        {
-
-
-                            while (u < hori)
-                            {
-
-
-                                while (i2 < fator_y)
-                                {
-                                    if (acumulado_i + i2 <= v)
-                                    {
-                                        mediaR = mediaR + image.GetPixel(acumulado_u, acumulado_i + i2).R;
-                                        mediaG = mediaG + image.GetPixel(acumulado_u, acumulado_i + i2).G;
-                                        mediaB = mediaB + image.GetPixel(acumulado_u, acumulado_i + i2).B;
-                                        mediaA = mediaA + image.GetPixel(acumulado_u, acumulado_i + i2).A;
-                                        a++;
-
-                                    }
-
-                                    i2 = i2 + 1;
-
-                                }
-                                while (u2 < fator_x)
-                                {
-                                    if (acumulado_u + u2 <= h)
-                                    {
-                                        mediaR = mediaR + image.GetPixel(acumulado_u + u2, acumulado_i).R;
-                                        mediaG = mediaG + image.GetPixel(acumulado_u + u2, acumulado_i).G;
-                                        mediaB = mediaB + image.GetPixel(acumulado_u + u2, acumulado_i).B;
-                                        mediaA = mediaA + image.GetPixel(acumulado_u + u2, acumulado_i).A;
-                                        a++;
-                                    }
-
-                                    u2 = u2 + 1;
-                                }
-                                mediaA = mediaA / a;
-                                mediaR = mediaR / a;
-                                mediaG = mediaG / a;
-                                mediaB = mediaB / a;
-
-
-                                nova_imagem.SetPixel(u, i, Color.FromArgb(Convert.ToInt32(mediaA), Convert.ToInt32(mediaR), Convert.ToInt32(mediaG), Convert.ToInt32(mediaB)));
-                                mediaA = 0;
-                                mediaR = 0;
-                                mediaG = 0;
-                                mediaB = 0;
-                                i2 = 0;
-                                u2 = 0;
-                                a = 0;
-                                u = u + 1;
-                                acumulado_u = acumulado_u + fator_x;
-                            }
-                            u = 0;
-                            acumulado_u = 0;
-
-
-                            i = i + 1;
-                            acumulado_i = acumulado_i + fator_y;
-                        }
-                    }
                 }
             }
             catch { }
