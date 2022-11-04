@@ -58,11 +58,11 @@ namespace ProjectWebMVC.Controllers
             }
 
             string savePath = serverPath + "\\images\\";
-            string fileName = string.IsNullOrEmpty(model.OriginImageName) ? model.OriginImage?.FileName : model.OriginImageName;
+            string fileOriginName = string.IsNullOrEmpty(model.OriginImageName) ? model.OriginImage?.FileName : model.OriginImageName;
 
-            if (model.OriginImage == null && !string.IsNullOrEmpty(fileName))
+            if (model.OriginImage == null && !string.IsNullOrEmpty(fileOriginName))
             {
-                using (var stream = System.IO.File.OpenRead(savePath + fileName))
+                using (var stream = System.IO.File.OpenRead(savePath + fileOriginName))
                 {
                     model.OriginImageBit = new Bitmap(stream.Name, true);
                 }
@@ -73,11 +73,11 @@ namespace ProjectWebMVC.Controllers
 
             if (model.OriginImageBit == null)
             {
-                using (var stream = System.IO.File.Create(savePath + fileName))
+                using (var stream = System.IO.File.Create(savePath + fileOriginName))
                 {
                     try
                     {
-                        model.OriginImageName = fileName;
+                        model.OriginImageName = fileOriginName;
                         model.OriginImage.CopyToAsync(stream);
                         model.OriginImageBit = new Bitmap(stream);
                     }
@@ -138,7 +138,12 @@ namespace ProjectWebMVC.Controllers
                     model.FilteredImageBit = ZoomOut(model.OriginImageBit, model.FiltersConfig);
                     if (model.FilteredImageBit == null)
                     {
-                        model.FilteredImageName = "zoom-error.jpg";
+                        if (model.FiltersConfig.ZoomX > 0 || model.FiltersConfig.ZoomY > 0)
+                        {
+                            model.FilteredImageName = "zoom-error.jpg";
+                            return View(model);
+                        }
+                        model.FilteredImageName = fileOriginName;
                         return View(model);
                     }
                     break;
@@ -160,7 +165,7 @@ namespace ProjectWebMVC.Controllers
 
             //--< Output as .Jpg >--
             //string savePath = serverPath + "\\images\\";
-            var filteredImageName = Guid.NewGuid() + "_Filtered_" + fileName;
+            var filteredImageName = Guid.NewGuid() + "_Filtered_" + fileOriginName;
             var outputPath = savePath + filteredImageName;
             using (var output = System.IO.File.Open(outputPath, FileMode.Create))
             {

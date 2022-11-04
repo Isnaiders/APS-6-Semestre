@@ -12,7 +12,7 @@ namespace ProjectWebMVC.Models.Enum
         Contrast,
         [Display(Name = "Conversão Cinza")]
         GrayConvertion,
-        [Display(Name = "Dobrar o tamanho")]
+        [Display(Name = "Dobrar resolução")]
         ZoomIn,
         [Display(Name = "Equalização")]
         Equalization,

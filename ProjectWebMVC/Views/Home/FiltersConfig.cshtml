@@ -3,6 +3,7 @@
 
 @{
 	Layout = "_LayoutModal";
+	var nameButton = Model.Type == FilterType.ZoomIn ? "OK" : "Selecionar";
 }
 
 @if (Model.Type == FilterType.Shine || Model.Type == FilterType.Contrast)
@@ -16,7 +17,7 @@
 				@Html.ValidationMessageFor(m => m.FiltersConfig.Red, "", new { Class = "text-danger" })
 			</div>
 		</div>
-				<br />
+		<br />
 		<div class="row">
 			<div class="col-md-12">
 				<label>Verde:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
@@ -25,7 +26,7 @@
 				@Html.ValidationMessageFor(m => m.FiltersConfig.Green, "", new { Class = "text-danger" })
 			</div>
 		</div>
-				<br />
+		<br />
 		<div class="row">
 			<div class="col-md-12">
 				<label>Azul:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
@@ -66,6 +67,18 @@
 	</div>
 }
 
+@if (Model.Type == FilterType.ZoomIn)
+{
+	<div class="ibox">
+		<div class="row">
+			<div class="col-md-12">
+				<p>Está opção irá dobrar a resolução da imagem e consequentemente vai aumentar o tamanho do arquivo.</p>
+				<p>Para ver este resultado será necessário baixar a imagem após aplicar o filtro.</p>
+			</div>
+		</div>
+	</div>
+}
+
 @if (Model.Type == FilterType.ZoomOut)
 {
 	<div class="ibox">
@@ -77,7 +90,7 @@
 				@Html.ValidationMessageFor(m => m.FiltersConfig.ZoomX, "", new { Class = "text-danger" })
 			</div>
 		</div>
-				<br />
+		<br />
 		<div class="row">
 			<div class="col-md-12">
 				<label>Informe a quantidade de zoom no eixo do Y:</label>
@@ -86,14 +99,20 @@
 				@Html.ValidationMessageFor(m => m.FiltersConfig.ZoomY, "", new { Class = "text-danger" })
 			</div>
 		</div>
+		<br />
+		<div class="row">
+			<div class="col-md-12">
+				<p>Colocar números menores 1 ou da mesma resolução da imagem escolhida não afetará no redução da imagem.</p>
+			</div>
+		</div>
 	</div>
 }
 
 <div class="row">
 	<div class="col-md-4"></div>
 	<div class="col-md-4">
-		<div style="margin-bottom: 10px;>
-			<button onclick="getFiltersConfig()" class="btn-slide"><span>Selecionar</span></button>
+		<div style="margin-bottom: 10px;">
+			<button onclick="getFiltersConfig()" class="btn-slide"><span>@nameButton</span></button>
 		</div>
 	</div>
 	<div class="col-md-4"></div>
