@@ -138,7 +138,7 @@ namespace ProjectWebMVC.Controllers
                     model.FilteredImageBit = ZoomOut(model.OriginImageBit, model.FiltersConfig);
                     if (model.FilteredImageBit == null)
                     {
-                        if (model.FiltersConfig.ZoomX > 0 || model.FiltersConfig.ZoomY > 0)
+                        if (model.FiltersConfig.ZoomX > 0 && model.FiltersConfig.ZoomY > 0)
                         {
                             model.FilteredImageName = "zoom-error.jpg";
                             return View(model);
