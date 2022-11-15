@@ -4,7 +4,6 @@ using System.Drawing.Imaging;
 using Microsoft.AspNetCore.Mvc;
 using ProjectWebMVC.Models;
 using ProjectWebMVC.Models.Enum;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace ProjectWebMVC.Controllers
 {
@@ -12,8 +11,8 @@ namespace ProjectWebMVC.Controllers
     {
         private string serverPath;
         private readonly ILogger<HomeController> _logger;
-        private Bitmap nova_imagem;
-        private Bitmap nova_imagem1;
+        private Bitmap newImage;
+        private Bitmap newImageFinal;
         public int[] Vcin = new int[256];
         public int[] Vcin2 = new int[256];
 
@@ -245,7 +244,7 @@ namespace ProjectWebMVC.Controllers
                 int faixaR = 0;
                 int faixaG = 0;
                 int faixaB = 0;
-                nova_imagem = new Bitmap(image.Width, image.Height);
+                newImage = new Bitmap(image.Width, image.Height);
                 int i, u;
 
                 for (i = 0; i < v; i++)
@@ -272,14 +271,14 @@ namespace ProjectWebMVC.Controllers
 
                         int trasn = image.GetPixel(u, i).A;
 
-                        nova_imagem.SetPixel(u, i, Color.FromArgb(trasn, faixaR, faixaG, faixaB));
+                        newImage.SetPixel(u, i, Color.FromArgb(trasn, faixaR, faixaG, faixaB));
 
                     }
                 }
             }
             catch { }
 
-            return nova_imagem;
+            return newImage;
         }
 
         private Bitmap Contrast(Bitmap image, FiltersConfigViewModel firtersConfig)
@@ -325,7 +324,7 @@ namespace ProjectWebMVC.Controllers
                 int faixaR = 0;
                 int faixaG = 0;
                 int faixaB = 0;
-                nova_imagem = new Bitmap(image.Width, image.Height);
+                newImage = new Bitmap(image.Width, image.Height);
                 int i, u;
 
                 for (i = 0; i < v; i++)
@@ -352,13 +351,13 @@ namespace ProjectWebMVC.Controllers
 
                         int trasn = image.GetPixel(u, i).A;
 
-                        nova_imagem.SetPixel(u, i, Color.FromArgb(trasn, faixaR, faixaG, faixaB));
+                        newImage.SetPixel(u, i, Color.FromArgb(trasn, faixaR, faixaG, faixaB));
                     }
                 }
             }
             catch { }
 
-            return nova_imagem;
+            return newImage;
         }
 
         private Bitmap GrayConvertion(Bitmap image)
@@ -396,14 +395,14 @@ namespace ProjectWebMVC.Controllers
 
                 int h = image.Width;
                 int v = image.Height;
-                nova_imagem = new Bitmap(2 * h, 2 * v);
+                newImage = new Bitmap(2 * h, 2 * v);
 
                 while (i < v)
                 {
                     while (u < h)
                     {
 
-                        nova_imagem.SetPixel(u2, i2, image.GetPixel(u, i));
+                        newImage.SetPixel(u2, i2, image.GetPixel(u, i));
 
                         u = u + 1;
                         u2 = u2 + 2;
@@ -424,19 +423,19 @@ namespace ProjectWebMVC.Controllers
                         {
                             if (u + 1 >= 2 * h)
                             {
-                                mediaR = (nova_imagem.GetPixel(u - 1, i).R);
-                                mediaG = (nova_imagem.GetPixel(u - 1, i).G);
-                                mediaB = (nova_imagem.GetPixel(u - 1, i).B);
-                                mediaA = (nova_imagem.GetPixel(u - 1, i).A);
+                                mediaR = (newImage.GetPixel(u - 1, i).R);
+                                mediaG = (newImage.GetPixel(u - 1, i).G);
+                                mediaB = (newImage.GetPixel(u - 1, i).B);
+                                mediaA = (newImage.GetPixel(u - 1, i).A);
                             }
                             else
                             {
-                                mediaR = (nova_imagem.GetPixel(u - 1, i).R + nova_imagem.GetPixel(u + 1, i).R) / 2;
-                                mediaG = (nova_imagem.GetPixel(u - 1, i).G + nova_imagem.GetPixel(u + 1, i).G) / 2;
-                                mediaB = (nova_imagem.GetPixel(u - 1, i).B + nova_imagem.GetPixel(u + 1, i).B) / 2;
-                                mediaA = (nova_imagem.GetPixel(u - 1, i).A + nova_imagem.GetPixel(u + 1, i).A) / 2;
+                                mediaR = (newImage.GetPixel(u - 1, i).R + newImage.GetPixel(u + 1, i).R) / 2;
+                                mediaG = (newImage.GetPixel(u - 1, i).G + newImage.GetPixel(u + 1, i).G) / 2;
+                                mediaB = (newImage.GetPixel(u - 1, i).B + newImage.GetPixel(u + 1, i).B) / 2;
+                                mediaA = (newImage.GetPixel(u - 1, i).A + newImage.GetPixel(u + 1, i).A) / 2;
                             }
-                            nova_imagem.SetPixel(u, i, Color.FromArgb(mediaA, mediaR, mediaG, mediaB));
+                            newImage.SetPixel(u, i, Color.FromArgb(mediaA, mediaR, mediaG, mediaB));
                         }
 
                         u = u + 1;
@@ -455,19 +454,19 @@ namespace ProjectWebMVC.Controllers
                         {
                             if (i + 1 >= 2 * v)
                             {
-                                mediaR = (nova_imagem.GetPixel(u, i - 1).R);
-                                mediaG = (nova_imagem.GetPixel(u, i - 1).G);
-                                mediaB = (nova_imagem.GetPixel(u, i - 1).B);
-                                mediaA = (nova_imagem.GetPixel(u, i - 1).A);
+                                mediaR = (newImage.GetPixel(u, i - 1).R);
+                                mediaG = (newImage.GetPixel(u, i - 1).G);
+                                mediaB = (newImage.GetPixel(u, i - 1).B);
+                                mediaA = (newImage.GetPixel(u, i - 1).A);
                             }
                             else
                             {
-                                mediaR = (nova_imagem.GetPixel(u, i - 1).R + nova_imagem.GetPixel(u, i + 1).R) / 2;
-                                mediaG = (nova_imagem.GetPixel(u, i - 1).G + nova_imagem.GetPixel(u, i + 1).G) / 2;
-                                mediaB = (nova_imagem.GetPixel(u, i - 1).B + nova_imagem.GetPixel(u, i + 1).B) / 2;
-                                mediaA = (nova_imagem.GetPixel(u, i - 1).A + nova_imagem.GetPixel(u, i + 1).A) / 2;
+                                mediaR = (newImage.GetPixel(u, i - 1).R + newImage.GetPixel(u, i + 1).R) / 2;
+                                mediaG = (newImage.GetPixel(u, i - 1).G + newImage.GetPixel(u, i + 1).G) / 2;
+                                mediaB = (newImage.GetPixel(u, i - 1).B + newImage.GetPixel(u, i + 1).B) / 2;
+                                mediaA = (newImage.GetPixel(u, i - 1).A + newImage.GetPixel(u, i + 1).A) / 2;
                             }
-                            nova_imagem.SetPixel(u, i, Color.FromArgb(mediaA, mediaR, mediaG, mediaB));
+                            newImage.SetPixel(u, i, Color.FromArgb(mediaA, mediaR, mediaG, mediaB));
                         }
 
                         i = i + 1;
@@ -478,7 +477,7 @@ namespace ProjectWebMVC.Controllers
             }
             catch { }
 
-            return nova_imagem;
+            return newImage;
         }
 
         private Bitmap Equalization(Bitmap image)
@@ -489,7 +488,7 @@ namespace ProjectWebMVC.Controllers
 
                 h = image.Width;
                 v = image.Height;
-                nova_imagem = GrayConvertion(image);
+                newImage = GrayConvertion(image);
 
                 double a = 255.0 / (Convert.ToDouble(h) * Convert.ToDouble(v));
                 int[] Vcin_cumR = new int[256];
@@ -542,7 +541,7 @@ namespace ProjectWebMVC.Controllers
                 }
 
 
-                nova_imagem1 = new Bitmap(h, v);
+                newImageFinal = new Bitmap(h, v);
 
                 for (x = 0; x < h; x++)
                 {
@@ -555,53 +554,53 @@ namespace ProjectWebMVC.Controllers
                         int r = Vcin_cumR[auxR];
                         int g = Vcin_cumG[auxG];
                         int b = Vcin_cumB[auxB];
-                        nova_imagem1.SetPixel(x, y, Color.FromArgb(trasn, r, g, b));
+                        newImageFinal.SetPixel(x, y, Color.FromArgb(trasn, r, g, b));
                     }
                 }
 
-                GrayConvertion(nova_imagem1);
+                GrayConvertion(newImageFinal);
             }
             catch { }
 
-            return nova_imagem1;
+            return newImageFinal;
         }
 
         private Bitmap MirroringHorizontal(Bitmap image)
         {
             int h = image.Width;
             int v = image.Height;
-            nova_imagem = new Bitmap(image.Width, image.Height);
+            newImage = new Bitmap(image.Width, image.Height);
             int i, u;
             for (i = 0; i < v; i++)
             {
                 for (u = 0; u < h; u++)
                 {
 
-                    nova_imagem.SetPixel(h - u - 1, i, image.GetPixel(u, i));
+                    newImage.SetPixel(h - u - 1, i, image.GetPixel(u, i));
 
                 }
             }
 
-            return nova_imagem;
+            return newImage;
         }
 
         private Bitmap MirroringVertical(Bitmap image)
         {
             int h = image.Width;
             int v = image.Height;
-            nova_imagem = new Bitmap(image.Width, image.Height);
+            newImage = new Bitmap(image.Width, image.Height);
             int i, u;
             for (u = 0; u < h; u++)
             {
                 for (i = 0; i < v; i++)
                 {
 
-                    nova_imagem.SetPixel(u, v - i - 1, image.GetPixel(u, i));
+                    newImage.SetPixel(u, v - i - 1, image.GetPixel(u, i));
 
                 }
             }
 
-            return nova_imagem;
+            return newImage;
         }
 
         private Bitmap Gaussiano(Bitmap image)
@@ -615,7 +614,7 @@ namespace ProjectWebMVC.Controllers
                 double colorB = 0;
                 int h = image.Width;
                 int v = image.Height;
-                nova_imagem = new Bitmap(h, v);
+                newImage = new Bitmap(h, v);
 
 
                 while (i < v)
@@ -624,7 +623,7 @@ namespace ProjectWebMVC.Controllers
                     {
                         if (u == 0 || i == 0 || u == h - 1 || i == v - 1)
                         {
-                            nova_imagem.SetPixel(u, i, image.GetPixel(u, i));
+                            newImage.SetPixel(u, i, image.GetPixel(u, i));
                         }
                         else
                         {
@@ -675,7 +674,7 @@ namespace ProjectWebMVC.Controllers
                                 colorG = 0;
 
 
-                            nova_imagem.SetPixel(u, i, Color.FromArgb(image.GetPixel(u, i).A, Convert.ToInt32(colorR), Convert.ToInt32(colorG), Convert.ToInt32(colorB)));
+                            newImage.SetPixel(u, i, Color.FromArgb(image.GetPixel(u, i).A, Convert.ToInt32(colorR), Convert.ToInt32(colorG), Convert.ToInt32(colorB)));
                         }
 
                         u = u + 1;
@@ -687,7 +686,7 @@ namespace ProjectWebMVC.Controllers
             }
             catch { }
 
-            return nova_imagem;
+            return newImage;
         }
 
         private Bitmap Laplaciano(Bitmap image)
@@ -701,7 +700,7 @@ namespace ProjectWebMVC.Controllers
                 double colorB = 0;
                 int h = image.Width;
                 int v = image.Height;
-                nova_imagem = new Bitmap(h, v);
+                newImage = new Bitmap(h, v);
 
                 while (i < v)
                 {
@@ -709,7 +708,7 @@ namespace ProjectWebMVC.Controllers
                     {
                         if (u == 0 || i == 0 || u == h - 1 || i == v - 1)
                         {
-                            nova_imagem.SetPixel(u, i, image.GetPixel(u, i));
+                            newImage.SetPixel(u, i, image.GetPixel(u, i));
                         }
                         else
                         {
@@ -760,7 +759,7 @@ namespace ProjectWebMVC.Controllers
                                 colorG = 0;
 
 
-                            nova_imagem.SetPixel(u, i, Color.FromArgb(image.GetPixel(u, i).A, Convert.ToInt32(colorR), Convert.ToInt32(colorG), Convert.ToInt32(colorB)));
+                            newImage.SetPixel(u, i, Color.FromArgb(image.GetPixel(u, i).A, Convert.ToInt32(colorR), Convert.ToInt32(colorG), Convert.ToInt32(colorB)));
                         }
                         u = u + 1;
                     }
@@ -770,7 +769,7 @@ namespace ProjectWebMVC.Controllers
             }
             catch { }
 
-            return nova_imagem;
+            return newImage;
         }
 
         private Bitmap Negative(Bitmap image)
@@ -782,7 +781,7 @@ namespace ProjectWebMVC.Controllers
                 int faixaR = 0;
                 int faixaG = 0;
                 int faixaB = 0;
-                nova_imagem = new Bitmap(image.Width, image.Height);
+                newImage = new Bitmap(image.Width, image.Height);
                 int i, u;
                 for (i = 0; i < v; i++)
                 {
@@ -796,13 +795,13 @@ namespace ProjectWebMVC.Controllers
 
                         int trasn = image.GetPixel(u, i).A;
 
-                        nova_imagem.SetPixel(u, i, Color.FromArgb(trasn, faixaR, faixaG, faixaB));
+                        newImage.SetPixel(u, i, Color.FromArgb(trasn, faixaR, faixaG, faixaB));
                     }
                 }
             }
             catch { }
 
-            return nova_imagem;
+            return newImage;
         }
 
         private Bitmap HighPass(Bitmap image)
@@ -816,7 +815,7 @@ namespace ProjectWebMVC.Controllers
                 double colorB = 0;
                 int h = image.Width;
                 int v = image.Height;
-                nova_imagem = new Bitmap(h, v);
+                newImage = new Bitmap(h, v);
 
                 while (i < v)
                 {
@@ -824,7 +823,7 @@ namespace ProjectWebMVC.Controllers
                     {
                         if (u == 0 || i == 0 || u == h - 1 || i == v - 1)
                         {
-                            nova_imagem.SetPixel(u, i, image.GetPixel(u, i));
+                            newImage.SetPixel(u, i, image.GetPixel(u, i));
                         }
                         else
                         {
@@ -874,7 +873,7 @@ namespace ProjectWebMVC.Controllers
                             else if (colorG < 0)
                                 colorG = 0;
 
-                            nova_imagem.SetPixel(u, i, Color.FromArgb(image.GetPixel(u, i).A, Convert.ToInt32(colorR), Convert.ToInt32(colorG), Convert.ToInt32(colorB)));
+                            newImage.SetPixel(u, i, Color.FromArgb(image.GetPixel(u, i).A, Convert.ToInt32(colorR), Convert.ToInt32(colorG), Convert.ToInt32(colorB)));
                         }
 
                         u = u + 1;
@@ -885,7 +884,7 @@ namespace ProjectWebMVC.Controllers
                 }
             }
             catch { }
-            return nova_imagem;
+            return newImage;
         }
 
         private Bitmap PrewittHx(Bitmap image)
@@ -899,7 +898,7 @@ namespace ProjectWebMVC.Controllers
                 double colorB = 0;
                 int h = image.Width;
                 int v = image.Height;
-                nova_imagem = new Bitmap(h, v);
+                newImage = new Bitmap(h, v);
 
 
                 while (i < v)
@@ -908,7 +907,7 @@ namespace ProjectWebMVC.Controllers
                     {
                         if (u == 0 || i == 0 || u == h - 1 || i == v - 1)
                         {
-                            nova_imagem.SetPixel(u, i, image.GetPixel(u, i));
+                            newImage.SetPixel(u, i, image.GetPixel(u, i));
                         }
                         else
                         {
@@ -964,7 +963,7 @@ namespace ProjectWebMVC.Controllers
                                 colorG = 0;
 
 
-                            nova_imagem.SetPixel(u, i, Color.FromArgb(image.GetPixel(u, i).A, Convert.ToInt32(colorR), Convert.ToInt32(colorG), Convert.ToInt32(colorB)));
+                            newImage.SetPixel(u, i, Color.FromArgb(image.GetPixel(u, i).A, Convert.ToInt32(colorR), Convert.ToInt32(colorG), Convert.ToInt32(colorB)));
                         }
 
                         u = u + 1;
@@ -976,7 +975,7 @@ namespace ProjectWebMVC.Controllers
             }
             catch { }
 
-            return nova_imagem;
+            return newImage;
         }
 
         private Bitmap PrewittHyHx(Bitmap image)
@@ -990,7 +989,7 @@ namespace ProjectWebMVC.Controllers
                 double colorB = 0;
                 int h = image.Width;
                 int v = image.Height;
-                nova_imagem = new Bitmap(h, v);
+                newImage = new Bitmap(h, v);
 
 
                 while (i < v)
@@ -999,7 +998,7 @@ namespace ProjectWebMVC.Controllers
                     {
                         if (u == 0 || i == 0 || u == h - 1 || i == v - 1)
                         {
-                            nova_imagem.SetPixel(u, i, image.GetPixel(u, i));
+                            newImage.SetPixel(u, i, image.GetPixel(u, i));
                         }
                         else
                         {
@@ -1058,7 +1057,7 @@ namespace ProjectWebMVC.Controllers
                             else if (colorG < 0)
                                 colorG = 0;
 
-                            nova_imagem.SetPixel(u, i, Color.FromArgb(image.GetPixel(u, i).A, Convert.ToInt32(colorR), Convert.ToInt32(colorG), Convert.ToInt32(colorB)));
+                            newImage.SetPixel(u, i, Color.FromArgb(image.GetPixel(u, i).A, Convert.ToInt32(colorR), Convert.ToInt32(colorG), Convert.ToInt32(colorB)));
                         }
                         u = u + 1;
                     }
@@ -1068,7 +1067,7 @@ namespace ProjectWebMVC.Controllers
             }
             catch { }
 
-            return nova_imagem;
+            return newImage;
         }
 
         private Bitmap Quantization(Bitmap image, FiltersConfigViewModel filtersConfig)
@@ -1092,7 +1091,7 @@ namespace ProjectWebMVC.Controllers
                 int faixaR = 0;
                 int faixaG = 0;
                 int faixaB = 0;
-                nova_imagem = new Bitmap(image.Width, image.Height);
+                newImage = new Bitmap(image.Width, image.Height);
                 int i, u;
                 for (i = 0; i < v; i++)
                 {
@@ -1116,12 +1115,12 @@ namespace ProjectWebMVC.Controllers
                         if (novo_valorB > 255)
                             novo_valorB = 255;
 
-                        nova_imagem.SetPixel(u, i, Color.FromArgb(trasn, novo_valorR, novo_valorG, novo_valorB));
+                        newImage.SetPixel(u, i, Color.FromArgb(trasn, novo_valorR, novo_valorG, novo_valorB));
                     }
                 }
             }
             catch { }
-            return nova_imagem;
+            return newImage;
         }
 
         private Bitmap ZoomOut(Bitmap image, FiltersConfigViewModel filtersConfig)
@@ -1151,7 +1150,7 @@ namespace ProjectWebMVC.Controllers
                 {
                     if (verti <= v)
                     {
-                        nova_imagem = new Bitmap(hori, verti);
+                        newImage = new Bitmap(hori, verti);
 
                         int fator_x = h / hori;
                         int fator_y = v / verti;
@@ -1191,7 +1190,7 @@ namespace ProjectWebMVC.Controllers
                                 mediaG = mediaG / a;
                                 mediaB = mediaB / a;
 
-                                nova_imagem.SetPixel(u, i, Color.FromArgb(Convert.ToInt32(mediaA), Convert.ToInt32(mediaR), Convert.ToInt32(mediaG), Convert.ToInt32(mediaB)));
+                                newImage.SetPixel(u, i, Color.FromArgb(Convert.ToInt32(mediaA), Convert.ToInt32(mediaR), Convert.ToInt32(mediaG), Convert.ToInt32(mediaB)));
                                 mediaA = 0;
                                 mediaR = 0;
                                 mediaG = 0;
@@ -1213,7 +1212,7 @@ namespace ProjectWebMVC.Controllers
             }
             catch { }
 
-            return nova_imagem;
+            return newImage;
         }
 
         private Bitmap AntiClockwiseRotation(Bitmap image, FiltersConfigViewModel filtersConfig)
@@ -1227,26 +1226,26 @@ namespace ProjectWebMVC.Controllers
 
                     int h = image.Width;
                     int v = image.Height;
-                    nova_imagem = new Bitmap(v, h);
+                    newImage = new Bitmap(v, h);
 
                     while (i < v)
                     {
                         while (u < h)
                         {
-                            nova_imagem.SetPixel(i, h - u - 1, image.GetPixel(u, i));
+                            newImage.SetPixel(i, h - u - 1, image.GetPixel(u, i));
                             u = u + 1;
                         }
                         u = 0;
                         i = i + 1;
                     }
 
-                    image = nova_imagem;
+                    image = newImage;
                 }
 
                 catch { }
             }
 
-            return nova_imagem;
+            return newImage;
         }
 
         private Bitmap ClockwiseRotation(Bitmap image, FiltersConfigViewModel filtersConfig)
@@ -1260,25 +1259,25 @@ namespace ProjectWebMVC.Controllers
 
                     int h = image.Width;
                     int v = image.Height;
-                    nova_imagem = new Bitmap(v, h);
+                    newImage = new Bitmap(v, h);
 
                     while (u < h)
                     {
                         while (i < v)
                         {
-                            nova_imagem.SetPixel(v - i - 1, u, image.GetPixel(u, i));
+                            newImage.SetPixel(v - i - 1, u, image.GetPixel(u, i));
                             i = i + 1;
                         }
                         i = 0;
                         u = u + 1;
                     }
 
-                    image = nova_imagem;
+                    image = newImage;
                 }
                 catch { }
             }
 
-            return nova_imagem;
+            return newImage;
         }
 
         private Bitmap SobelHx(Bitmap image)
@@ -1292,7 +1291,7 @@ namespace ProjectWebMVC.Controllers
                 double colorB = 0;
                 int h = image.Width;
                 int v = image.Height;
-                nova_imagem = new Bitmap(h, v);
+                newImage = new Bitmap(h, v);
 
 
                 while (i < v)
@@ -1301,7 +1300,7 @@ namespace ProjectWebMVC.Controllers
                     {
                         if (u == 0 || i == 0 || u == h - 1 || i == v - 1)
                         {
-                            nova_imagem.SetPixel(u, i, image.GetPixel(u, i));
+                            newImage.SetPixel(u, i, image.GetPixel(u, i));
                         }
                         else
                         {
@@ -1356,7 +1355,7 @@ namespace ProjectWebMVC.Controllers
                             else if (colorG < 0)
                                 colorG = 0;
 
-                            nova_imagem.SetPixel(u, i, Color.FromArgb(image.GetPixel(u, i).A, Convert.ToInt32(colorR), Convert.ToInt32(colorG), Convert.ToInt32(colorB)));
+                            newImage.SetPixel(u, i, Color.FromArgb(image.GetPixel(u, i).A, Convert.ToInt32(colorR), Convert.ToInt32(colorG), Convert.ToInt32(colorB)));
                         }
                         u = u + 1;
                     }
@@ -1366,7 +1365,7 @@ namespace ProjectWebMVC.Controllers
             }
 
             catch { }
-            return nova_imagem;
+            return newImage;
         }
 
         private Bitmap SobelHy(Bitmap image)
@@ -1380,7 +1379,7 @@ namespace ProjectWebMVC.Controllers
                 double colorB = 0;
                 int h = image.Width;
                 int v = image.Height;
-                nova_imagem = new Bitmap(h, v);
+                newImage = new Bitmap(h, v);
 
                 while (i < v)
                 {
@@ -1388,7 +1387,7 @@ namespace ProjectWebMVC.Controllers
                     {
                         if (u == 0 || i == 0 || u == h - 1 || i == v - 1)
                         {
-                            nova_imagem.SetPixel(u, i, image.GetPixel(u, i));
+                            newImage.SetPixel(u, i, image.GetPixel(u, i));
                         }
                         else
                         {
@@ -1443,7 +1442,7 @@ namespace ProjectWebMVC.Controllers
                             else if (colorG < 0)
                                 colorG = 0;
 
-                            nova_imagem.SetPixel(u, i, Color.FromArgb(image.GetPixel(u, i).A, Convert.ToInt32(colorR), Convert.ToInt32(colorG), Convert.ToInt32(colorB)));
+                            newImage.SetPixel(u, i, Color.FromArgb(image.GetPixel(u, i).A, Convert.ToInt32(colorR), Convert.ToInt32(colorG), Convert.ToInt32(colorB)));
                         }
                         u = u + 1;
                     }
@@ -1453,7 +1452,7 @@ namespace ProjectWebMVC.Controllers
             }
             catch { }
 
-            return nova_imagem;
+            return newImage;
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
